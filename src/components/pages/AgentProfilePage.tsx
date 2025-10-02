@@ -122,16 +122,6 @@ export function AgentProfilePage({ agentId, onNavigate }: AgentProfilePageProps)
                           <Instagram className="h-5 w-5" />
                         </a>
                       )}
-                      {agent.social.linkedin && (
-                        <a href={agent.social.linkedin} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
-                          <Linkedin className="h-5 w-5" />
-                        </a>
-                      )}
-                      {agent.social.twitter && (
-                        <a href={agent.social.twitter} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
-                          <Twitter className="h-5 w-5" />
-                        </a>
-                      )}
                     </div>
                   </div>
                 </div>
@@ -227,6 +217,22 @@ export function AgentProfilePage({ agentId, onNavigate }: AgentProfilePageProps)
                     Email Agent
                   </a>
                 </Button>
+                {agent.social.linkedin && (
+                  <Button variant="outline" className="w-full justify-start" asChild>
+                    <a href={agent.social.linkedin} target="_blank" rel="noopener noreferrer">
+                      <Linkedin className="h-4 w-4 mr-2" />
+                      LinkedIn
+                    </a>
+                  </Button>
+                )}
+                {agent.social.twitter && (
+                  <Button variant="outline" className="w-full justify-start" asChild>
+                    <a href={agent.social.twitter} target="_blank" rel="noopener noreferrer">
+                      <Twitter className="h-4 w-4 mr-2" />
+                      Twitter
+                    </a>
+                  </Button>
+                )}
               </CardContent>
             </Card>
 
