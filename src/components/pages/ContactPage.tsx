@@ -78,7 +78,11 @@ export function ContactPage() {
                   </div>
                 </div>
               
-              <div className="pt-6 border-t mt-auto">
+              <div className="pt-8 pb-2 mt-auto">
+                <div className="border-t"></div>
+              </div>
+              
+              <div className="pt-2">
                 <h4 className="mb-4">Follow Us</h4>
                 <div className="flex gap-3">
                   <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-colors">
