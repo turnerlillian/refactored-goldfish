@@ -74,7 +74,7 @@ export function AgentProfilePage({ agentId, onNavigate }: AgentProfilePageProps)
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Profile Header */}
-            <Card>
+            <Card className="bg-muted/30">
               <CardContent className="p-8">
                 <div className="flex flex-col md:flex-row gap-6 items-start">
                   <Avatar className="h-32 w-32">
@@ -139,7 +139,7 @@ export function AgentProfilePage({ agentId, onNavigate }: AgentProfilePageProps)
             </Card>
 
             {/* About */}
-            <Card>
+            <Card className="bg-muted/30">
               <CardHeader>
                 <CardTitle>About {agent.name.split(' ')[0]}</CardTitle>
               </CardHeader>
@@ -163,21 +163,21 @@ export function AgentProfilePage({ agentId, onNavigate }: AgentProfilePageProps)
 
             {/* Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card>
+              <Card className="bg-muted/30">
                 <CardContent className="p-6 text-center">
                   <TrendingUp className="h-8 w-8 mx-auto mb-2 text-primary" />
                   <div className="text-2xl mb-1">{agent.sales}</div>
                   <p className="text-sm text-muted-foreground">Properties Sold</p>
                 </CardContent>
               </Card>
-              <Card>
+              <Card className="bg-muted/30">
                 <CardContent className="p-6 text-center">
                   <Star className="h-8 w-8 mx-auto mb-2 text-yellow-400 fill-yellow-400" />
                   <div className="text-2xl mb-1">{agent.rating}</div>
                   <p className="text-sm text-muted-foreground">Average Rating</p>
                 </CardContent>
               </Card>
-              <Card>
+              <Card className="bg-muted/30">
                 <CardContent className="p-6 text-center">
                   <Award className="h-8 w-8 mx-auto mb-2 text-primary" />
                   <div className="text-2xl mb-1">{agent.experience}</div>
@@ -188,7 +188,7 @@ export function AgentProfilePage({ agentId, onNavigate }: AgentProfilePageProps)
 
             {/* Active Listings */}
             {agentProperties.length > 0 && (
-              <Card>
+              <Card className="bg-muted/30">
                 <CardHeader>
                   <CardTitle>Active Listings</CardTitle>
                 </CardHeader>
@@ -210,7 +210,7 @@ export function AgentProfilePage({ agentId, onNavigate }: AgentProfilePageProps)
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Contact Card */}
-            <Card>
+            <Card className="bg-muted/30">
               <CardHeader>
                 <CardTitle>Contact Information</CardTitle>
               </CardHeader>
@@ -231,11 +231,13 @@ export function AgentProfilePage({ agentId, onNavigate }: AgentProfilePageProps)
             </Card>
 
             {/* Contact Form */}
-            <ContactForm
-              title="Get in Touch"
-              description={`Send a message to ${agent.name.split(' ')[0]}`}
-              agentId={agent.id}
-            />
+            <div className="max-w-md mx-auto">
+              <ContactForm
+                title="Get in Touch"
+                description={`Send a message to ${agent.name.split(' ')[0]}`}
+                agentId={agent.id}
+              />
+            </div>
           </div>
         </div>
       </div>

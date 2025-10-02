@@ -130,9 +130,10 @@ export function PropertyDetailPage({ propertyId, onNavigate }: PropertyDetailPag
           </div>
 
           {/* Quick Info Card */}
-          <div className="lg:col-span-1">
-            <Card className="sticky top-4 bg-muted/30">
-              <CardContent className="p-8 space-y-4">
+          <div className="lg:col-span-1 flex justify-center">
+            <div className="w-full max-w-md">
+              <Card className="bg-muted/30">
+                <CardContent className="p-8 space-y-4">
                 <div>
                   <div className="text-3xl text-primary mb-2">
                     ${property.price.toLocaleString()}
@@ -170,15 +171,16 @@ export function PropertyDetailPage({ propertyId, onNavigate }: PropertyDetailPag
 
                 <Separator />
 
-                <Button className="w-full" onClick={() => onNavigate("contact")}>
+                <Button className="w-full" onClick={() => onNavigate("contact")}> 
                   <Calendar className="h-4 w-4 mr-2" />
                   Schedule Tour
                 </Button>
                 <Button variant="outline" className="w-full">
                   Request Info
                 </Button>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </div>
@@ -373,12 +375,14 @@ export function PropertyDetailPage({ propertyId, onNavigate }: PropertyDetailPag
             )}
 
             {/* Contact Form */}
-            <ContactForm
-              title="Schedule a Tour"
-              description="Interested in this property? Fill out the form below."
-              propertyId={property.id}
-              agentId={property.agentId}
-            />
+            <div className="max-w-md mx-auto">
+              <ContactForm
+                title="Schedule a Tour"
+                description="Interested in this property? Fill out the form below."
+                propertyId={property.id}
+                agentId={property.agentId}
+              />
+            </div>
           </div>
         </div>
       </div>
