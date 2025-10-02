@@ -286,29 +286,29 @@ export function BlogPage({ onNavigate }: BlogPageProps) {
         </div>
 
         {/* Call to Action */}
-        <div className="text-center mt-16">
-          <Card className="glass-effect p-8 border border-white/20 max-w-2xl mx-auto">
-            <h2 className="text-2xl font-bold mb-4 text-primary">Ready to Start Your Real Estate Journey?</h2>
-            <p className="text-muted-foreground mb-6">
-              Connect with our expert team for personalized guidance on buying, selling, or investing in properties.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg" 
-                onClick={() => onNavigate("contact")}
-                className="bg-primary hover:bg-primary/90 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
-              >
-                Contact Us Today
-              </Button>
-              <Button 
-                variant="outline" 
-                size="lg" 
-                onClick={() => onNavigate("search")}
-                className="border-primary/20 hover:bg-primary/5 hover:scale-105 transition-all duration-300"
-              >
-                Browse Properties
-              </Button>
-            </div>
+        <div className="mt-16 max-w-3xl mx-auto text-center">
+          <Card className="bg-muted/30">
+            <CardContent className="p-8">
+              <h2 className="mb-4">Ready to Start Your Real Estate Journey?</h2>
+              <p className="text-muted-foreground mb-6">
+                Connect with our expert team for personalized guidance on buying, selling, or investing in properties.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button 
+                  size="lg" 
+                  onClick={() => onNavigate("contact")}
+                >
+                  Contact Us Today
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  onClick={() => onNavigate("search")}
+                >
+                  Browse Properties
+                </Button>
+              </div>
+            </CardContent>
           </Card>
         </div>
       </div>
