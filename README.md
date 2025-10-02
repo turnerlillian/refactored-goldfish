@@ -126,8 +126,3 @@ The codebase follows modern React patterns:
 - Component composition over inheritance
 - Responsive design principles
 - Accessible UI components
-
-## Original Design
-
-This project is based on the Figma design available at:
-https://www.figma.com/design/xiasgo7DCxnuDhD9EEEDfB/Rowlly-Properties-Website-Design  
