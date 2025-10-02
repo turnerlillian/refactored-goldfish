@@ -63,12 +63,10 @@ export function ContactForm({ title, description, propertyId, agentId }: Contact
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title || "Contact Us"}</CardTitle>
-        {description && <CardDescription>{description}</CardDescription>}
-      </CardHeader>
-      <CardContent>
+    <Card className="bg-muted/30">
+      <CardContent className="p-8">
+        <h3 className="mb-4">{title || "Contact Us"}</h3>
+        {description && <p className="text-muted-foreground mb-6">{description}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">

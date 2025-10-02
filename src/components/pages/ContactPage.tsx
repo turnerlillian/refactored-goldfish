@@ -15,10 +15,9 @@ export function ContactPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
         {/* Contact Information */}
         <div className="lg:col-span-1 space-y-6">
-          <Card>
-            <CardContent className="p-6 space-y-6">
-              <div>
-                <h3 className="mb-4">Contact Information</h3>
+          <Card className="bg-muted/30">
+            <CardContent className="p-8">
+              <h3 className="mb-6">Contact Information</h3>
                 
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
@@ -65,8 +64,7 @@ export function ContactPage() {
                     </div>
                   </div>
                 </div>
-              </div>
-
+              
               <div className="pt-6 border-t">
                 <h4 className="mb-4">Follow Us</h4>
                 <div className="flex gap-3">
@@ -88,10 +86,10 @@ export function ContactPage() {
           </Card>
 
           {/* Newsletter Signup */}
-          <Card>
-            <CardContent className="p-6">
-              <h3 className="mb-2">Stay Updated</h3>
-              <p className="text-sm text-muted-foreground mb-4">
+          <Card className="bg-muted/30">
+            <CardContent className="p-8">
+              <h3 className="mb-4">Stay Updated</h3>
+              <p className="text-muted-foreground mb-6">
                 Subscribe to our newsletter for the latest property listings and market insights.
               </p>
               <div className="flex gap-2">

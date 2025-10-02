@@ -450,11 +450,9 @@ export function PropertySearchPage({ onNavigate, initialQuery = "" }: PropertySe
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Desktop Filters */}
         <div className="hidden lg:block">
-          <Card className="bg-muted/30 border-primary/20">
-            <CardHeader>
-              <CardTitle>Filters</CardTitle>
-            </CardHeader>
-            <CardContent>
+          <Card className="bg-muted/30">
+            <CardContent className="p-8">
+              <h3 className="mb-6">Filters</h3>
               {FilterPanel()}
             </CardContent>
           </Card>

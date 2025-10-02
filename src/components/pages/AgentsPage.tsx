@@ -21,10 +21,10 @@ export function AgentsPage({ onNavigate }: AgentsPageProps) {
 
       {/* About Us Section */}
       <div className="max-w-4xl mx-auto mb-16">
-        <Card className="bg-muted/30 border-primary/20">
+        <Card className="bg-muted/30">
           <CardContent className="p-8">
             <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold mb-4">About Rowlly Properties</h2>
+              <h2 className="mb-4">About Rowlly Properties</h2>
             </div>
             
             <div className="grid md:grid-cols-2 gap-8 items-center">
@@ -60,11 +60,11 @@ export function AgentsPage({ onNavigate }: AgentsPageProps) {
                 
                 <div className="text-center">
                   <Button 
+                    size="lg"
                     onClick={(e) => {
                       e.stopPropagation();
                       onNavigate("contact");
-                    }} 
-                    className="bg-primary hover:bg-primary/90"
+                    }}
                   >
                     Start Your Journey
                   </Button>
