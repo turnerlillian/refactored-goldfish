@@ -34,7 +34,7 @@ export function PropertyCard({ property, onViewDetails }: PropertyCardProps) {
         
         {property.featured && (
           <Badge className="absolute top-3 left-3 bg-secondary text-black font-semibold shadow-lg backdrop-blur-sm">
-            ✨ Featured
+            Featured
           </Badge>
         )}
         

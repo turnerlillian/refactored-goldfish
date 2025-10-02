@@ -12,6 +12,7 @@ interface HomePageProps {
 
 export function HomePage({ onNavigate }: HomePageProps) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
   const featuredProperties = properties.filter(p => p.featured);
 
   const handleSearch = (e: React.FormEvent) => {
@@ -52,9 +53,11 @@ export function HomePage({ onNavigate }: HomePageProps) {
                   <div className="flex-1 relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary-foreground/70 h-4 w-4" />
                     <Input
-                      placeholder="Search by location, property type, or features..."
+                      placeholder={isFocused ? "" : "Search by location, property type, or features..."}
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
+                      onFocus={() => setIsFocused(true)}
+                      onBlur={() => setIsFocused(false)}
                       className="pl-10 h-12 border-0 bg-transparent text-base text-white placeholder:text-white/70 focus-visible:ring-2 focus-visible:ring-secondary/50"
                     />
                   </div>
