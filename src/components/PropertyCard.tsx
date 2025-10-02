@@ -11,20 +11,32 @@ interface PropertyCardProps {
 }
 
 export function PropertyCard({ property, onViewDetails }: PropertyCardProps) {
+  const formattedPrice = property.price.toLocaleString('en-US', { 
+    style: 'currency', 
+    currency: 'USD', 
+    maximumFractionDigits: 0 
+  });
+  
   return (
-    <Card className="group overflow-hidden hover-lift border-0 modern-shadow cursor-pointer bg-white/90 backdrop-blur-sm hover:bg-white transition-all duration-300" onClick={() => onViewDetails(property.id)}>
+    <Card 
+      className="group overflow-hidden hover-lift border-0 modern-shadow cursor-pointer bg-background/90 backdrop-blur-sm hover:bg-background transition-all duration-300" 
+      onClick={() => onViewDetails(property.id)}
+      itemScope
+      itemType="https://schema.org/RealEstateListing"
+    >
       <div className="relative aspect-[4/3] overflow-hidden">
         <ImageWithFallback
           src={property.images[0]}
-          alt={property.title}
+          alt={`${property.title} - ${property.bedrooms} bedroom ${property.propertyType} in ${property.city}, ${property.state}`}
           className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105 group-hover:brightness-110"
+          itemProp="image"
         />
         <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         
         <Button
           variant="ghost"
           size="icon"
-          className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm hover:bg-white hover:scale-110 transition-all duration-200 shadow-lg border border-white/20"
+          className="absolute top-3 right-3 bg-background/95 backdrop-blur-sm hover:bg-background hover:scale-110 transition-all duration-200 shadow-lg border border-background/20"
           onClick={(e: React.MouseEvent) => {
             e.stopPropagation();
           }}
@@ -40,7 +52,8 @@ export function PropertyCard({ property, onViewDetails }: PropertyCardProps) {
         
         <Badge 
           variant="secondary" 
-          className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-sm text-foreground font-medium shadow-sm border border-white/20"
+          className="absolute bottom-3 left-3 bg-background/95 backdrop-blur-sm text-foreground font-medium shadow-sm border border-background/20"
+          itemProp="category"
         >
           {property.status}
         </Badge>
@@ -49,11 +62,11 @@ export function PropertyCard({ property, onViewDetails }: PropertyCardProps) {
       <CardContent className="p-3 sm:p-4">
         <div className="space-y-2 sm:space-y-3">
           <div className="space-y-1">
-            <h3 className="font-bold text-lg group-hover:text-primary transition-colors leading-tight h-12 flex items-start">
+            <h3 className="font-bold text-lg group-hover:text-primary transition-colors leading-tight h-12 flex items-start" itemProp="name">
               {property.title}
             </h3>
-            <p className="text-primary font-bold text-xl h-7 flex items-center">
-              ${property.price.toLocaleString()}
+            <p className="text-primary font-bold text-xl h-7 flex items-center" itemProp="price" content={property.price.toString()}>
+              {formattedPrice}
             </p>
           </div>
           

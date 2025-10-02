@@ -10,6 +10,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "../u
 import { Badge } from "../ui/badge";
 import { PropertyCard } from "../PropertyCard";
 import { properties } from "../../data/mockData";
+import { updatePageSEO, seoConfigs } from "../../utils/seo";
 
 interface PropertySearchPageProps {
   onNavigate: (page: string, params?: any) => void;
@@ -35,6 +36,23 @@ export function PropertySearchPage({ onNavigate, initialQuery = "" }: PropertySe
   const [searchSuggestions, setSearchSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
+
+  // SEO Optimization
+  useEffect(() => {
+    const searchTitle = filters.search 
+      ? `Properties in ${filters.search} - Search Results | Rowlly Properties`
+      : seoConfigs.search.title;
+    const searchDescription = filters.search
+      ? `Find properties in ${filters.search}. Expert real estate guidance and luxury properties available.`
+      : seoConfigs.search.description;
+    
+    updatePageSEO({
+      ...seoConfigs.search,
+      title: searchTitle,
+      description: searchDescription,
+      canonical: filters.search ? `https://rowllyproperties.com/search?q=${encodeURIComponent(filters.search)}` : seoConfigs.search.canonical
+    });
+  }, [filters.search]);
 
   // Generate search suggestions
   const allLocations = useMemo(() => {

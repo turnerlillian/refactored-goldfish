@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ArrowLeft, Bed, Bath, Maximize, MapPin, Heart, Share2, Calendar, DollarSign, Star, Phone, Mail } from "lucide-react";
 import { Button } from "../ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Separator } from "../ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { ContactForm } from "../ContactForm";
 import { properties, agents } from "../../data/mockData";
 import { ImageWithFallback } from "../ImageWithFallback";
+import { updatePageSEO, createPropertySchema, createBreadcrumbSchema } from "../../utils/seo";
 
 interface PropertyDetailPageProps {
   propertyId: string;
@@ -18,6 +19,32 @@ export function PropertyDetailPage({ propertyId, onNavigate }: PropertyDetailPag
   const property = properties.find((p) => p.id === propertyId);
   const agent = property ? agents.find((a) => a.id === property.agentId) : null;
   const [selectedImage, setSelectedImage] = useState(0);
+
+  // SEO Optimization
+  useEffect(() => {
+    if (property) {
+      const breadcrumbs = [
+        { name: "Home", url: "https://rowllyproperties.com" },
+        { name: "Properties", url: "https://rowllyproperties.com/search" },
+        { name: property.title, url: `https://rowllyproperties.com/property/${property.id}` }
+      ];
+
+      updatePageSEO({
+        title: `${property.title} - ${property.price.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })} | Rowlly Properties`,
+        description: `${property.description} Located in ${property.city}, ${property.state}. ${property.bedrooms} beds, ${property.bathrooms} baths, ${property.sqft} sqft. Contact our expert agents today.`,
+        keywords: `${property.title}, ${property.city} ${property.state}, ${property.propertyType}, real estate, property for sale`,
+        canonical: `https://rowllyproperties.com/property/${property.id}`,
+        ogTitle: `${property.title} - Premium Real Estate`,
+        ogDescription: `${property.price.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })} • ${property.bedrooms} beds • ${property.bathrooms} baths • ${property.sqft} sqft`,
+        ogImage: property.images[0],
+        ogType: "article",
+        structuredData: [
+          createPropertySchema(property),
+          createBreadcrumbSchema(breadcrumbs)
+        ]
+      });
+    }
+  }, [property]);
 
   if (!property) {
     return (
@@ -40,6 +67,28 @@ export function PropertyDetailPage({ propertyId, onNavigate }: PropertyDetailPag
             Back to Search
           </Button>
         </div>
+      </div>
+
+      {/* Property Title & Key Info */}
+      <div className="container py-6">
+        <Card className="bg-muted/30">
+          <CardContent className="p-6 lg:p-8">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+              <div>
+                <h1 className="text-3xl lg:text-4xl font-bold text-primary mb-2">{property.title}</h1>
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <MapPin className="h-4 w-4" />
+                  <span>
+                    {property.address}, {property.city}, {property.state} {property.zip}
+                  </span>
+                </div>
+              </div>
+              <div className="flex flex-col lg:items-end">
+                <Badge>{property.status}</Badge>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Image Gallery */}
@@ -82,8 +131,8 @@ export function PropertyDetailPage({ propertyId, onNavigate }: PropertyDetailPag
 
           {/* Quick Info Card */}
           <div className="lg:col-span-1">
-            <Card className="sticky top-4">
-              <CardContent className="p-6 space-y-4">
+            <Card className="sticky top-4 bg-muted/30">
+              <CardContent className="p-8 space-y-4">
                 <div>
                   <div className="text-3xl text-primary mb-2">
                     ${property.price.toLocaleString()}
@@ -139,22 +188,8 @@ export function PropertyDetailPage({ propertyId, onNavigate }: PropertyDetailPag
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-6">
             {/* Overview */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div>
-                    <CardTitle>{property.title}</CardTitle>
-                    <div className="flex items-center gap-2 mt-2 text-muted-foreground">
-                      <MapPin className="h-4 w-4" />
-                      <span>
-                        {property.address}, {property.city}, {property.state} {property.zip}
-                      </span>
-                    </div>
-                  </div>
-                  <Badge>{property.status}</Badge>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-6">
+            <Card className="bg-muted/30">
+              <CardContent className="p-8 space-y-6">
                 <div>
                   <h3 className="mb-3">Description</h3>
                   <p className="text-muted-foreground">{property.description}</p>
@@ -201,14 +236,12 @@ export function PropertyDetailPage({ propertyId, onNavigate }: PropertyDetailPag
             </Card>
 
             {/* Financial Information */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+            <Card className="bg-muted/30">
+              <CardContent className="p-8">
+                <h3 className="mb-6 flex items-center gap-2">
                   <DollarSign className="h-5 w-5" />
                   Financial Information
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
+                </h3>
                 <div>
                   <h4 className="mb-3">Tax History</h4>
                   <div className="space-y-2">
@@ -240,14 +273,12 @@ export function PropertyDetailPage({ propertyId, onNavigate }: PropertyDetailPag
             </Card>
 
             {/* Neighborhood */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+            <Card className="bg-muted/30">
+              <CardContent className="p-8">
+                <h3 className="mb-6 flex items-center gap-2">
                   <MapPin className="h-5 w-5" />
                   Neighborhood
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
+                </h3>
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
                     <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
@@ -299,11 +330,9 @@ export function PropertyDetailPage({ propertyId, onNavigate }: PropertyDetailPag
           <div className="space-y-6">
             {/* Agent Card */}
             {agent && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Contact Agent</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
+              <Card className="bg-muted/30">
+                <CardContent className="p-8 space-y-4">
+                  <h3 className="mb-4">Contact Agent</h3>
                   <div className="flex items-center gap-3">
                     <Avatar className="h-16 w-16">
                       <AvatarImage src={agent.image} alt={agent.name} />

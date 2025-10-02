@@ -35,6 +35,43 @@ A modern real estate website built with React, TypeScript, Vite, and Tailwind CS
 └── README.md            # This file
 ```
 
+## SEO Optimization
+
+The website is fully optimized for search engines with the following features:
+
+### Meta Tags & Structured Data
+- Dynamic page-specific meta titles and descriptions
+- Open Graph tags for social media sharing
+- JSON-LD structured data for properties, agents, and organization
+- Breadcrumb navigation schema
+- Article schema for blog posts
+
+### Technical SEO
+- **Sitemap**: `/sitemap.xml` with all pages and image information
+- **Robots.txt**: Proper crawling instructions for search engines
+- **Canonical URLs**: Prevent duplicate content issues
+- **Semantic HTML**: Proper heading hierarchy (h1, h2, h3)
+- **Accessibility**: ARIA labels, alt text, and landmark roles
+
+### Content SEO
+- Keyword-optimized page titles and descriptions
+- Location-based keywords for property searches
+- Rich snippets for property listings
+- Image alt text with descriptive property information
+- Internal linking between related pages
+
+### Performance SEO
+- Fast loading times with Vite optimization
+- Responsive design for all devices
+- Optimized images with fallbacks
+- Minimal JavaScript for critical rendering path
+
+### Local SEO
+- Business schema markup
+- Location-specific keywords
+- Contact information structured data
+- Service area definitions
+
 ## Features
 
 - 🏠 Property listings and search

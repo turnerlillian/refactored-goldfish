@@ -2,6 +2,8 @@ import { Calendar, User, Clock, ArrowLeft, Share2, Facebook, Twitter, Linkedin, 
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { Card, CardContent } from "../ui/card";
+import { useEffect } from "react";
+import { updatePageSEO, createBreadcrumbSchema } from "../../utils/seo";
 
 interface BlogPostDetailPageProps {
   onNavigate: (page: string, params?: any) => void;
@@ -169,7 +171,49 @@ export function BlogPostDetailPage({ onNavigate, postId }: BlogPostDetailPagePro
     }
   ];
 
-  const post = blogPosts.find(p => p.id === postId);
+    const post = blogPosts.find(p => p.id === postId);
+
+  // SEO Optimization
+  useEffect(() => {
+    if (post) {
+      const breadcrumbs = [
+        { name: "Home", url: "https://rowllyproperties.com" },
+        { name: "Blog", url: "https://rowllyproperties.com/blog" },
+        { name: post.title, url: `https://rowllyproperties.com/blog/${post.id}` }
+      ];
+
+      const articleSchema = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": post.title,
+        "description": post.excerpt,
+        "author": {
+          "@type": "Person",
+          "name": post.author
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Rowlly Properties"
+        },
+        "datePublished": post.date,
+        "dateModified": post.date,
+        "mainEntityOfPage": `https://rowllyproperties.com/blog/${post.id}`,
+        "image": post.image
+      };
+
+      updatePageSEO({
+        title: `${post.title} | Rowlly Properties Blog`,
+        description: post.excerpt,
+        keywords: `${post.category}, real estate, ${post.title.toLowerCase().split(' ').join(', ')}`,
+        canonical: `https://rowllyproperties.com/blog/${post.id}`,
+        ogTitle: post.title,
+        ogDescription: post.excerpt,
+        ogImage: post.image,
+        ogType: "article",
+        structuredData: [articleSchema, createBreadcrumbSchema(breadcrumbs)]
+      });
+    }
+  }, [post]);
   const relatedPosts = blogPosts.filter(p => post?.relatedPosts?.includes(p.id));
 
   if (!post) {
@@ -283,7 +327,7 @@ export function BlogPostDetailPage({ onNavigate, postId }: BlogPostDetailPagePro
           </div>
 
           {/* Author Bio */}
-          <Card className="mb-8">
+          <Card className="bg-muted/30 mb-8">
             <CardContent className="p-6">
               <div className="flex items-start gap-4">
                 <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
@@ -322,7 +366,7 @@ export function BlogPostDetailPage({ onNavigate, postId }: BlogPostDetailPagePro
               <h2 className="text-2xl font-bold mb-6">Related Articles</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {relatedPosts.map((relatedPost) => (
-                  <Card key={relatedPost.id} className="group overflow-hidden hover-lift border-0 modern-shadow cursor-pointer bg-white/90 backdrop-blur-sm hover:bg-white transition-all duration-300">
+                  <Card key={relatedPost.id} className="group overflow-hidden hover-lift border-0 modern-shadow cursor-pointer bg-background/90 backdrop-blur-sm hover:bg-background transition-all duration-300">
                     <div className="relative aspect-[16/10] overflow-hidden">
                       <img
                         src={relatedPost.image}

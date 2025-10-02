@@ -4,7 +4,8 @@ import { Input } from "../ui/input";
 import { Card, CardContent } from "../ui/card";
 import { PropertyCard } from "../PropertyCard";
 import { properties } from "../../data/mockData";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { updatePageSEO, seoConfigs, createOrganizationSchema } from "../../utils/seo";
 
 interface HomePageProps {
   onNavigate: (page: string, params?: any) => void;
@@ -15,40 +16,63 @@ export function HomePage({ onNavigate }: HomePageProps) {
   const [isFocused, setIsFocused] = useState(false);
   const featuredProperties = properties.filter(p => p.featured);
 
+  // SEO Optimization
+  useEffect(() => {
+    updatePageSEO({
+      ...seoConfigs.home,
+      structuredData: createOrganizationSchema()
+    });
+  }, []);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     onNavigate("search", { query: searchQuery });
   };
 
   const stats = [
-    { icon: TrendingUp, value: "5,000+", label: "Properties Sold" },
+    { icon: TrendingUp, value: "$50M+", label: "In Sales Volume" },
     { icon: Award, value: "15+", label: "Years Experience" },
-    { icon: Users, value: "200+", label: "Happy Clients" },
-    { icon: Search, value: "24/7", label: "Support Available" },
+    { icon: Users, value: "98%", label: "Client Satisfaction" },
+    { icon: Search, value: "<30", label: "Avg. Days on Market" },
   ];
 
   return (
-    <div className="flex flex-col">
+    <main className="flex flex-col">
       {/* Hero Section */}
-      <section className="py-12 md:py-16 lg:py-20 relative overflow-hidden min-h-[70vh] flex items-center">
+      <section className="py-12 md:py-16 lg:py-20 relative overflow-hidden min-h-[70vh] flex items-center" role="banner" aria-label="Hero section">
         <div className="absolute inset-0 bg-primary" />
         <div className="absolute inset-0 bg-black/20" />
         <div className="absolute bottom-10 left-10 w-96 h-96 bg-primary/30 rounded-full blur-3xl float-animation" />
         
         <div className="container relative z-10">
-          <div className="text-center-section fade-in text-primary-foreground homepage-hero">
+          <header className="text-center-section fade-in text-primary-foreground homepage-hero">
             <h1 className="text-5xl lg:text-7xl font-bold leading-tight mb-6">
               Find Your Perfect
-              <span className="block text-secondary">Dream Home</span>
+              <span className="block text-secondary">Luxury Home</span>
             </h1>
             
-            <p className="text-xl text-primary-foreground/90 max-w-3xl mx-auto mb-10 leading-relaxed">
-              Discover exceptional properties with our expert team. Whether you're buying, selling, or investing, 
-              we're here to guide you through every step of your real estate journey.
+            <p className="text-xl text-primary-foreground/90 max-w-3xl mx-auto mb-6 leading-relaxed">
+              With over 15 years of proven success, we've helped 5,000+ families find their perfect home. 
+              Experience personalized service backed by local expertise and cutting-edge technology.
             </p>
             
+            <div className="flex flex-wrap justify-center items-center gap-6 text-primary-foreground/80 mb-10 text-sm font-medium">
+              <div className="flex items-center gap-2">
+                <Award className="h-4 w-4" />
+                <span>Licensed & Certified</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <TrendingUp className="h-4 w-4" />
+                <span>Top 1% of Agents</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Users className="h-4 w-4" />
+                <span>200+ 5-Star Reviews</span>
+              </div>
+            </div>
+            
             <div className="relative max-w-2xl mx-auto mb-8">
-              <div className="bg-transparent backdrop-blur-sm p-3 rounded-2xl shadow-lg border-2 border-white/30">
+              <div className="bg-transparent backdrop-blur-sm p-3 rounded-2xl shadow-lg border-2 border-primary-foreground/30">
                 <form onSubmit={handleSearch} className="flex gap-3">
                   <div className="flex-1 relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary-foreground/70 h-4 w-4" />
@@ -58,7 +82,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
                       onChange={(e) => setSearchQuery(e.target.value)}
                       onFocus={() => setIsFocused(true)}
                       onBlur={() => setIsFocused(false)}
-                      className="pl-10 h-12 border-0 bg-transparent text-base text-white placeholder:text-white/70 focus-visible:ring-2 focus-visible:ring-secondary/50"
+                      className="pl-10 h-12 border-0 bg-transparent text-base text-primary-foreground placeholder:text-primary-foreground/70 focus-visible:ring-2 focus-visible:ring-secondary/50"
                     />
                   </div>
                   <Button type="submit" size="lg" className="h-12 px-6 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 bg-secondary hover:bg-secondary/90 text-black">
@@ -68,7 +92,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
                 </form>
               </div>
             </div>
-          </div>
+          </header>
         </div>
       </section>
 
@@ -114,7 +138,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
         <div className="container">
           <div className="card-grid card-grid-4">
             {stats.map((stat, index) => (
-              <Card key={index} className="group text-center p-8 hover-lift border-0 modern-shadow bg-white backdrop-blur-sm">
+              <Card key={index} className="group text-center p-8 hover-lift border-0 modern-shadow bg-background backdrop-blur-sm">
                 <CardContent className="p-0">
                   <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                     <stat.icon className="h-8 w-8 text-primary" />
@@ -139,16 +163,17 @@ export function HomePage({ onNavigate }: HomePageProps) {
               <Award className="h-4 w-4" />
               <span>Why Choose Us</span>
             </div>
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">Experience Excellence in
-              <span className="text-primary block">Real Estate</span>
+            <h2 className="text-4xl lg:text-5xl font-bold mb-6">Why Top Performers Choose
+              <span className="text-primary block">Rowlly Properties</span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Discover the difference with our professional approach, cutting-edge technology, and personalized service
+              Join the ranks of successful investors and homeowners who trust our proven track record, 
+              market expertise, and commitment to exceptional results
             </p>
           </div>
 
           <div className="card-grid card-grid-3">
-            <Card className="group hover-lift border-0 modern-shadow bg-white/80 backdrop-blur-sm relative overflow-hidden">
+            <Card className="group hover-lift border-0 modern-shadow bg-background/80 backdrop-blur-sm relative overflow-hidden">
               <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <CardContent className="relative p-10 text-center">
                 <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-primary/10 mx-auto mb-8 group-hover:scale-110 transition-transform duration-300">
@@ -161,7 +186,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
               </CardContent>
             </Card>
 
-            <Card className="group hover-lift border-0 modern-shadow bg-white/80 backdrop-blur-sm relative overflow-hidden">
+            <Card className="group hover-lift border-0 modern-shadow bg-background/80 backdrop-blur-sm relative overflow-hidden">
               <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <CardContent className="relative p-10 text-center">
                 <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-primary/10 mx-auto mb-8 group-hover:scale-110 transition-transform duration-300">
@@ -174,7 +199,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
               </CardContent>
             </Card>
 
-            <Card className="group hover-lift border-0 modern-shadow bg-white/80 backdrop-blur-sm relative overflow-hidden">
+            <Card className="group hover-lift border-0 modern-shadow bg-background/80 backdrop-blur-sm relative overflow-hidden">
               <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <CardContent className="relative p-10 text-center">
                 <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-primary/10 mx-auto mb-8 group-hover:scale-110 transition-transform duration-300">
@@ -197,18 +222,19 @@ export function HomePage({ onNavigate }: HomePageProps) {
         
         <div className="container relative">
           <div className="text-center-section text-primary-foreground">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm text-white text-sm font-medium mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-foreground/20 backdrop-blur-sm text-primary-foreground text-sm font-medium mb-8">
               <Award className="h-4 w-4" />
               <span>Ready to Get Started?</span>
             </div>
             
-            <h2 className="text-4xl lg:text-6xl font-bold mb-6 text-white">
-              Your Dream Home is
-              <span className="block text-secondary">Just One Click Away</span>
+            <h2 className="text-4xl lg:text-6xl font-bold mb-6 text-primary-foreground">
+              Your Next Home is
+              <span className="block text-secondary">Just a Click Away</span>
             </h2>
             
             <p className="text-xl text-primary-foreground/90 max-w-3xl mx-auto mb-12 leading-relaxed">
-              Get started today and let our expert team guide you through every step of your real estate journey with confidence and ease.
+              Schedule your complimentary consultation today. Our expert team is standing by to provide 
+              personalized guidance and exclusive market insights.
             </p>
             
             <div className="btn-group">
@@ -219,36 +245,36 @@ export function HomePage({ onNavigate }: HomePageProps) {
                 className="h-16 px-12 text-lg font-semibold rounded-2xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300"
               >
                 <Search className="mr-3 h-6 w-6" />
-                Explore Properties
+                Browse Premium Properties
               </Button>
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="h-16 px-12 text-lg font-semibold rounded-2xl bg-transparent border-2 border-white/30 text-white hover:bg-white/10 backdrop-blur-sm transition-all duration-300" 
+                className="h-16 px-12 text-lg font-semibold rounded-2xl bg-transparent border-2 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 backdrop-blur-sm shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300" 
                 onClick={() => onNavigate("contact")}
               >
                 <Users className="mr-3 h-6 w-6" />
-                Talk to an Expert
+                Get Free Consultation
               </Button>
             </div>
             
             <div className="mt-16 flex flex-wrap justify-center items-center gap-8 text-primary-foreground/70">
               <div className="flex items-center gap-2">
                 <TrendingUp className="h-5 w-5" />
-                <span className="text-sm font-medium">5,000+ Homes Sold</span>
+                <span className="text-sm font-medium">$50M+ in Sales Volume</span>
               </div>
               <div className="flex items-center gap-2">
                 <Award className="h-5 w-5" />
-                <span className="text-sm font-medium">15+ Years Experience</span>
+                <span className="text-sm font-medium">Top 1% Performance</span>
               </div>
               <div className="flex items-center gap-2">
                 <Users className="h-5 w-5" />
-                <span className="text-sm font-medium">200+ Happy Families</span>
+                <span className="text-sm font-medium">98% Client Satisfaction</span>
               </div>
             </div>
           </div>
         </div>
       </section>
-    </div>
+    </main>
   );
 }

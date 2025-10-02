@@ -4,7 +4,8 @@ import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { Input } from "../ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { updatePageSEO, seoConfigs } from "../../utils/seo";
 
 interface BlogPageProps {
   onNavigate: (page: string, params?: any) => void;
@@ -14,6 +15,11 @@ export function BlogPage({ onNavigate }: BlogPageProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
+  
+  // SEO Optimization
+  useEffect(() => {
+    updatePageSEO(seoConfigs.blog);
+  }, []);
   
   // Map blog authors to agent IDs
   const getAgentIdByAuthor = (authorName: string): string | null => {
@@ -207,7 +213,7 @@ export function BlogPage({ onNavigate }: BlogPageProps) {
             filteredAndSortedPosts.map((post, index) => (
               <Card 
                 key={post.id} 
-                className="group overflow-hidden hover-lift border-0 modern-shadow cursor-pointer bg-white/90 backdrop-blur-sm hover:bg-white transition-all duration-300 h-full flex flex-col"
+                className="group overflow-hidden hover-lift border-0 modern-shadow cursor-pointer bg-background/90 backdrop-blur-sm hover:bg-background transition-all duration-300 h-full flex flex-col"
                 onClick={() => onNavigate("blog-post", { id: post.id.toString() })}
               >
               <div className="relative aspect-[16/10] overflow-hidden">

@@ -16,29 +16,35 @@ export function Footer({ onNavigate }: FooterProps) {
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary shadow-lg">
                 <Home className="h-6 w-6 text-primary-foreground" />
               </div>
-              <span className="text-lg font-bold text-primary">Rowlly Properties</span>
+              <div className="flex flex-col">
+                <span className="text-lg font-bold text-primary font-display">Rowlly Properties</span>
+                <span className="text-xs text-muted-foreground font-medium tracking-wide">
+                  LICENSED REAL ESTATE BROKERAGE
+                </span>
+              </div>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Your trusted partner in finding the perfect home. Excellence in real estate since 2009.
+              Award-winning real estate professionals serving clients with integrity and expertise since 2009. 
+              Licensed, bonded, and committed to exceptional results.
             </p>
             <div className="flex gap-3">
               <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="group">
-                <div className="w-10 h-10 rounded-lg bg-white/80 backdrop-blur-sm border border-white/20 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300 hover:scale-110 shadow-sm">
+                <div className="w-10 h-10 rounded-lg bg-background/80 backdrop-blur-sm border border-background/20 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300 hover:scale-110 shadow-sm">
                   <Facebook className="h-4 w-4" />
                 </div>
               </a>
               <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="group">
-                <div className="w-10 h-10 rounded-lg bg-white/80 backdrop-blur-sm border border-white/20 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300 hover:scale-110 shadow-sm">
+                <div className="w-10 h-10 rounded-lg bg-background/80 backdrop-blur-sm border border-background/20 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300 hover:scale-110 shadow-sm">
                   <Instagram className="h-4 w-4" />
                 </div>
               </a>
               <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="group">
-                <div className="w-10 h-10 rounded-lg bg-white/80 backdrop-blur-sm border border-white/20 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300 hover:scale-110 shadow-sm">
+                <div className="w-10 h-10 rounded-lg bg-background/80 backdrop-blur-sm border border-background/20 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300 hover:scale-110 shadow-sm">
                   <Linkedin className="h-4 w-4" />
                 </div>
               </a>
               <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="group">
-                <div className="w-10 h-10 rounded-lg bg-white/80 backdrop-blur-sm border border-white/20 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300 hover:scale-110 shadow-sm">
+                <div className="w-10 h-10 rounded-lg bg-background/80 backdrop-blur-sm border border-background/20 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300 hover:scale-110 shadow-sm">
                   <Twitter className="h-4 w-4" />
                 </div>
               </a>

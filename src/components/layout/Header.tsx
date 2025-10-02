@@ -31,9 +31,14 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary group-hover:scale-105 group-hover:shadow-lg transition-all duration-300 shadow-md">
             <Home className="h-6 w-6 text-primary-foreground" />
           </div>
-          <span className="text-xl font-bold text-primary">
-            Rowlly Properties
-          </span>
+          <div className="flex flex-col">
+            <span className="text-xl font-bold text-primary font-display">
+              Rowlly Properties
+            </span>
+            <span className="text-xs text-muted-foreground font-medium tracking-wide">
+              LICENSED REAL ESTATE PROFESSIONALS
+            </span>
+          </div>
         </div>
 
         {/* Desktop Navigation */}
@@ -119,9 +124,14 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary shadow-sm">
                 <Home className="h-5 w-5 text-primary-foreground" />
               </div>
-              <span className="text-lg font-bold text-primary">
-                Rowlly Properties
-              </span>
+              <div className="flex flex-col">
+                <span className="text-lg font-bold text-primary font-display">
+                  Rowlly Properties
+                </span>
+                <span className="text-xs text-muted-foreground font-medium tracking-wide">
+                  LICENSED PROFESSIONALS
+                </span>
+              </div>
             </div>
             
             <nav className="flex flex-col gap-2">

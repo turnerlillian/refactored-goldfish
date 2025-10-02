@@ -4,85 +4,42 @@ import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Badge } from "../ui/badge";
 import { agents } from "../../data/mockData";
+import { useEffect } from "react";
+import { updatePageSEO, seoConfigs } from "../../utils/seo";
 
 interface AgentsPageProps {
   onNavigate: (page: string, params?: any) => void;
 }
 
 export function AgentsPage({ onNavigate }: AgentsPageProps) {
+  // SEO Optimization
+  useEffect(() => {
+    updatePageSEO(seoConfigs.agents);
+  }, []);
   return (
     <div className="container py-12">
       <div className="max-w-3xl mx-auto text-center mb-12">
-        <h1>Get to Know the Rowlly Team</h1>
+        <h1>Meet Your Real Estate Experts</h1>
         <p className="text-lg text-muted-foreground mt-4">
-          Work with experienced real estate professionals who are committed to helping you find your dream home.
+          Our award-winning team of licensed professionals brings decades of combined experience, 
+          local market expertise, and proven results to every transaction.
         </p>
+        <div className="flex flex-wrap justify-center items-center gap-6 mt-6 text-sm text-muted-foreground">
+          <span>✓ Top 1% of Agents</span>
+          <span>✓ $50M+ in Sales</span>
+          <span>✓ 98% Client Satisfaction</span>
+        </div>
       </div>
 
-      {/* About Us Section */}
-      <div className="max-w-4xl mx-auto mb-16">
-        <Card className="bg-muted/30">
-          <CardContent className="p-8">
-            <div className="text-center mb-6">
-              <h2 className="mb-4">About Rowlly Properties</h2>
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-8 items-center">
-              <div className="space-y-4">
-                <p className="text-muted-foreground leading-relaxed">
-                  Founded with a vision to revolutionize the real estate experience, Rowlly Properties has been serving clients with integrity, expertise, and personalized service for over a decade. We believe that finding the perfect home should be an exciting journey, not a stressful ordeal.
-                </p>
-                
-                <p className="text-muted-foreground leading-relaxed">
-                  Our team of dedicated professionals brings together years of market knowledge, cutting-edge technology, and a genuine passion for helping people achieve their real estate dreams. Whether you're buying your first home, upgrading to your forever home, or making an investment, we're here to guide you every step of the way.
-                </p>
-              </div>
-              
-              <div className="space-y-6">
-                <div className="grid grid-cols-2 gap-4 text-center">
-                  <div className="p-4 rounded-lg bg-white/50">
-                    <h3 className="text-2xl font-bold text-primary">500+</h3>
-                    <p className="text-sm text-muted-foreground">Homes Sold</p>
-                  </div>
-                  <div className="p-4 rounded-lg bg-white/50">
-                    <h3 className="text-2xl font-bold text-primary">99.7%</h3>
-                    <p className="text-sm text-muted-foreground">Client Satisfaction</p>
-                  </div>
-                  <div className="p-4 rounded-lg bg-white/50">
-                    <h3 className="text-2xl font-bold text-primary">15+</h3>
-                    <p className="text-sm text-muted-foreground">Years Experience</p>
-                  </div>
-                  <div className="p-4 rounded-lg bg-white/50">
-                    <h3 className="text-2xl font-bold text-primary">24/7</h3>
-                    <p className="text-sm text-muted-foreground">Support</p>
-                  </div>
-                </div>
-                
-                <div className="text-center">
-                  <Button 
-                    size="lg"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onNavigate("contact");
-                    }}
-                  >
-                    Start Your Journey
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Agent Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
         {agents.map((agent) => (
           <Card 
             key={agent.id} 
-            className="overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer hover:scale-[1.02] hover:border-primary/30"
+            className="bg-muted/30 overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer hover:scale-[1.02] hover:border-primary/30"
             onClick={() => onNavigate("agent", { id: agent.id })}
           >
-            <CardContent className="p-6 space-y-4">
+            <CardContent className="p-8 space-y-4">
               <div className="flex flex-col items-center text-center">
                 <Avatar className="h-24 w-24 mb-4">
                   <AvatarImage src={agent.image} alt={agent.name} />
@@ -169,6 +126,62 @@ export function AgentsPage({ onNavigate }: AgentsPageProps) {
             </CardContent>
           </Card>
         ))}
+      </div>
+
+      {/* About Us Section */}
+      <div className="max-w-4xl mx-auto mb-16">
+        <Card className="bg-muted/30">
+          <CardContent className="p-8">
+            <div className="text-center mb-6">
+              <h2 className="mb-4">About Rowlly Properties</h2>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="space-y-4">
+                <p className="text-muted-foreground leading-relaxed">
+                  As a premier real estate brokerage, Rowlly Properties has earned its reputation through consistent results, ethical practices, and unwavering commitment to client success. With over $50 million in sales volume and recognition as top 1% performers, our team brings proven expertise to every transaction.
+                </p>
+                
+                <p className="text-muted-foreground leading-relaxed">
+                  Our licensed professionals leverage advanced market analytics, extensive local knowledge, and strategic marketing to maximize value for our clients. From first-time buyers to seasoned investors, we deliver personalized solutions backed by industry-leading results and 98% client satisfaction ratings.
+                </p>
+              </div>
+              
+              <div className="space-y-6">
+                <div className="grid grid-cols-2 gap-4 text-center">
+                  <div className="p-4 rounded-lg bg-background/50">
+                    <h3 className="text-2xl font-bold text-primary">$50M+</h3>
+                    <p className="text-sm text-muted-foreground">Sales Volume</p>
+                  </div>
+                  <div className="p-4 rounded-lg bg-background/50">
+                    <h3 className="text-2xl font-bold text-primary">98%</h3>
+                    <p className="text-sm text-muted-foreground">Client Satisfaction</p>
+                  </div>
+                  <div className="p-4 rounded-lg bg-background/50">
+                    <h3 className="text-2xl font-bold text-primary">15+</h3>
+                    <p className="text-sm text-muted-foreground">Years Experience</p>
+                  </div>
+                  <div className="p-4 rounded-lg bg-white/50">
+                    <h3 className="text-2xl font-bold text-primary">24/7</h3>
+                    <p className="text-sm text-muted-foreground">Support</p>
+                  </div>
+                </div>
+                
+                <div className="text-center">
+                  <Button 
+                    size="lg"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onNavigate("contact");
+                    }}
+                  >
+                    Start Your Journey
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       <div className="mt-16 max-w-3xl mx-auto text-center">

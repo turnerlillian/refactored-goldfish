@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <!-- Homepage -->
+  <url>
+    <loc>https://rowllyproperties.com/</loc>
+    <lastmod>2025-10-02</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <!-- Property Search -->
+  <url>
+    <loc>https://rowllyproperties.com/search</loc>
+    <lastmod>2025-10-02</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Agents Directory -->
+  <url>
+    <loc>https://rowllyproperties.com/agents</loc>
+    <lastmod>2025-10-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Contact -->
+  <url>
+    <loc>https://rowllyproperties.com/contact</loc>
+    <lastmod>2025-10-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Blog -->
+  <url>
+    <loc>https://rowllyproperties.com/blog</loc>
+    <lastmod>2025-10-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Individual Agent Pages -->
+  <url>
+    <loc>https://rowllyproperties.com/agent/1</loc>
+    <lastmod>2025-10-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://rowllyproperties.com/agent/2</loc>
+    <lastmod>2025-10-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://rowllyproperties.com/agent/3</loc>
+    <lastmod>2025-10-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <!-- Sample Property Pages -->
+  <url>
+    <loc>https://rowllyproperties.com/property/1</loc>
+    <lastmod>2025-10-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1600596542815-ffad4c1539a9</image:loc>
+      <image:title>Modern Luxury Villa - Premium Real Estate</image:title>
+      <image:caption>Stunning 4-bedroom luxury villa with panoramic city views</image:caption>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://rowllyproperties.com/property/2</loc>
+    <lastmod>2025-10-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde</image:loc>
+      <image:title>Downtown Penthouse - Luxury Living</image:title>
+      <image:caption>Exclusive penthouse in the heart of downtown</image:caption>
+    </image:image>
+  </url>
+  
+  <!-- Blog Posts -->
+  <url>
+    <loc>https://rowllyproperties.com/blog/1</loc>
+    <lastmod>2025-10-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://rowllyproperties.com/blog/2</loc>
+    <lastmod>2025-10-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://rowllyproperties.com/blog/3</loc>
+    <lastmod>2025-10-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+</urlset>

@@ -63,11 +63,13 @@ export function ContactForm({ title, description, propertyId, agentId }: Contact
   };
 
   return (
-    <Card className="bg-muted/30">
-      <CardContent className="p-8">
-        <h3 className="mb-4">{title || "Contact Us"}</h3>
-        {description && <p className="text-muted-foreground mb-6">{description}</p>}
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <Card className="bg-muted/30 h-full">
+      <CardHeader className="pb-6">
+        <CardTitle>{title || "Contact Us"}</CardTitle>
+        {description && <CardDescription>{description}</CardDescription>}
+      </CardHeader>
+      <CardContent className="h-full flex flex-col">
+        <form onSubmit={handleSubmit} className="space-y-4 flex-1 flex flex-col">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="name">Full Name *</Label>
@@ -125,7 +127,7 @@ export function ContactForm({ title, description, propertyId, agentId }: Contact
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 flex-1 flex flex-col">
             <Label htmlFor="message">Message *</Label>
             <Textarea
               id="message"
@@ -133,17 +135,19 @@ export function ContactForm({ title, description, propertyId, agentId }: Contact
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
               required
               placeholder="Tell us about your needs..."
-              rows={5}
+              className="flex-1 min-h-[120px]"
             />
           </div>
 
-          <Button type="submit" className="w-full">
-            Send Message
-          </Button>
+          <div className="space-y-4 mt-auto">
+            <Button type="submit" className="w-full">
+              Send Message
+            </Button>
 
-          <p className="text-xs text-muted-foreground text-center">
-            By submitting this form, you agree to our privacy policy and terms of service.
-          </p>
+            <p className="text-xs text-muted-foreground text-center">
+              By submitting this form, you agree to our privacy policy and terms of service.
+            </p>
+          </div>
         </form>
       </CardContent>
     </Card>

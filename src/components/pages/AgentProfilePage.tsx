@@ -7,6 +7,8 @@ import { Separator } from "../ui/separator";
 import { PropertyCard } from "../PropertyCard";
 import { ContactForm } from "../ContactForm";
 import { agents, properties } from "../../data/mockData";
+import { useEffect } from "react";
+import { updatePageSEO, createPersonSchema, createBreadcrumbSchema } from "../../utils/seo";
 
 interface AgentProfilePageProps {
   agentId: string;
@@ -16,6 +18,32 @@ interface AgentProfilePageProps {
 export function AgentProfilePage({ agentId, onNavigate }: AgentProfilePageProps) {
   const agent = agents.find((a) => a.id === agentId);
   const agentProperties = properties.filter((p) => p.agentId === agentId).slice(0, 3);
+
+  // SEO Optimization
+  useEffect(() => {
+    if (agent) {
+      const breadcrumbs = [
+        { name: "Home", url: "https://rowllyproperties.com" },
+        { name: "Agents", url: "https://rowllyproperties.com/agents" },
+        { name: agent.name, url: `https://rowllyproperties.com/agent/${agent.id}` }
+      ];
+
+      updatePageSEO({
+        title: `${agent.name} - Expert Real Estate Agent | Rowlly Properties`,
+        description: `Meet ${agent.name}, ${agent.title} at Rowlly Properties. ${agent.bio} Contact ${agent.name.split(' ')[0]} for expert real estate guidance.`,
+        keywords: `${agent.name}, real estate agent, ${agent.title}, property expert, realtor`,
+        canonical: `https://rowllyproperties.com/agent/${agent.id}`,
+        ogTitle: `${agent.name} - Real Estate Expert`,
+        ogDescription: `${agent.title} • ${agent.sales} Sales • ${agent.rating}★ Rating`,
+        ogImage: agent.image,
+        ogType: "profile",
+        structuredData: [
+          createPersonSchema(agent),
+          createBreadcrumbSchema(breadcrumbs)
+        ]
+      });
+    }
+  }, [agent]);
 
   if (!agent) {
     return (

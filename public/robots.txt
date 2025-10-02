@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://rowllyproperties.com/sitemap.xml
+
+# Disallow admin pages (if any)
+Disallow: /admin/
+Disallow: /api/
+
+# Allow important pages
+Allow: /
+Allow: /search
+Allow: /agents
+Allow: /contact
+Allow: /blog
+Allow: /property/
+Allow: /agent/
+
+# Crawl delay (optional - adjust as needed)
+Crawl-delay: 1
