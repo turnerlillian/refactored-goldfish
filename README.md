@@ -163,3 +163,34 @@ The codebase follows modern React patterns:
 - Component composition over inheritance
 - Responsive design principles
 - Accessible UI components
+
+## Deployment
+
+### GitHub Pages
+
+This project is configured for automatic deployment to GitHub Pages:
+
+1. **Automatic Deployment**: Push to the `main` branch triggers automatic deployment via GitHub Actions
+2. **Manual Deployment**: Run `npm run deploy` to deploy manually
+3. **Build Only**: Run `npm run build` to build for production
+
+### Deployment Configuration
+
+- **Base Path**: `/refactored-goldfish/` (configured for GitHub Pages)
+- **Output Directory**: `dist/`
+- **Build Target**: ESNext
+
+### Setup Instructions
+
+1. Enable GitHub Pages in your repository settings
+2. Set source to "GitHub Actions" 
+3. Push to main branch or run `npm run deploy`
+4. Your site will be available at: `https://[username].github.io/refactored-goldfish/`
+
+### Troubleshooting Deployment
+
+If you see a blank page:
+- ✅ Check that the base path matches your repository name
+- ✅ Ensure `.nojekyll` file is in the public directory
+- ✅ Verify GitHub Pages is enabled and set to GitHub Actions
+- ✅ Check the Actions tab for deployment logs
