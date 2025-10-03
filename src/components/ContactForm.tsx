@@ -217,13 +217,13 @@ export function ContactForm({ title, description, propertyId, agentId }: Contact
 
   return (
     <Card className="bg-muted/30 h-full">
-      <CardHeader className="pb-6">
+      <CardHeader className="pb-0 md:pb-4 !pb-0 md:!pb-4">
         <CardTitle>{title || "Contact Us"}</CardTitle>
         {description && <CardDescription>{description}</CardDescription>}
       </CardHeader>
-      <CardContent className="h-full flex flex-col">
-        <form onSubmit={handleSubmit} className="space-y-4 flex-1 flex flex-col" noValidate aria-label="Contact form">
-          <fieldset className="space-y-4" disabled={isSubmitting}>
+      <CardContent className="h-full flex flex-col pt-0 md:pt-1 -mt-1 md:mt-0">
+        <form onSubmit={handleSubmit} className="space-y-2 md:space-y-4 flex-1 flex flex-col" noValidate aria-label="Contact form">
+          <fieldset className="space-y-2 md:space-y-4" disabled={isSubmitting}>
             <legend className="sr-only">Contact Information</legend>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -237,13 +237,10 @@ export function ContactForm({ title, description, propertyId, agentId }: Contact
                   required
                   aria-required="true"
                   aria-invalid={errors.name ? "true" : "false"}
-                  aria-describedby={errors.name ? "name-error" : "name-help"}
+                  aria-describedby={errors.name ? "name-error" : undefined}
                   placeholder="Enter your full name"
-                  className={errors.name ? "border-red-500 focus:ring-red-500" : ""}
+                  className={`truncate text-sm placeholder:text-sm ${errors.name ? "border-red-500 focus:ring-red-500" : ""}`}
                 />
-                <div id="name-help" className="text-xs text-muted-foreground">
-                  {!errors.name && !fieldTouched.name && "Please enter your full legal name"}
-                </div>
                 {errors.name && (
                   <div id="name-error" className="text-sm text-red-600 flex items-center gap-1" role="alert">
                     <span className="text-red-500">⚠</span>
@@ -263,13 +260,10 @@ export function ContactForm({ title, description, propertyId, agentId }: Contact
                   required
                   aria-required="true"
                   aria-invalid={errors.email ? "true" : "false"}
-                  aria-describedby={errors.email ? "email-error" : "email-help"}
+                  aria-describedby={errors.email ? "email-error" : undefined}
                   placeholder="your.email@example.com"
-                  className={errors.email ? "border-red-500 focus:ring-red-500" : ""}
+                  className={`truncate text-sm placeholder:text-sm ${errors.email ? "border-red-500 focus:ring-red-500" : ""}`}
                 />
-                <div id="email-help" className="text-xs text-muted-foreground">
-                  {!errors.email && !fieldTouched.email && "We'll use this to respond to your inquiry"}
-                </div>
                 {errors.email && (
                   <div id="email-error" className="text-sm text-red-600 flex items-center gap-1" role="alert">
                     <span className="text-red-500">⚠</span>
@@ -292,12 +286,9 @@ export function ContactForm({ title, description, propertyId, agentId }: Contact
                   }}
                   onBlur={() => handleFieldBlur('phone')}
                   placeholder="(555) 123-4567 or +1 555 123 4567"
-                  aria-describedby={errors.phone ? "phone-error" : "phone-description"}
-                  className={errors.phone ? "border-red-500 focus:ring-red-500" : ""}
+                  aria-describedby={errors.phone ? "phone-error" : undefined}
+                  className={`truncate text-sm placeholder:text-sm ${errors.phone ? "border-red-500 focus:ring-red-500" : ""}`}
                 />
-                <div id="phone-description" className="text-xs text-muted-foreground">
-                  {!errors.phone && "Optional. US or international numbers accepted (10-15 digits)."}
-                </div>
                 {errors.phone && (
                   <div id="phone-error" className="text-sm text-red-600 flex items-center gap-1" role="alert">
                     <span className="text-red-500">⚠</span>
@@ -317,26 +308,23 @@ export function ContactForm({ title, description, propertyId, agentId }: Contact
                     id="inquiryType"
                     aria-required="true"
                     aria-invalid={errors.inquiryType ? "true" : "false"}
-                    aria-describedby={errors.inquiryType ? "inquiryType-error" : "inquiryType-help"}
-                    className={errors.inquiryType ? "border-red-500 focus:ring-red-500" : ""}
+                    aria-describedby={errors.inquiryType ? "inquiryType-error" : undefined}
+                    className={`truncate ${errors.inquiryType ? "border-red-500 focus:ring-red-500" : ""}`}
                     onBlur={() => handleFieldBlur('inquiryType')}
                   >
-                    <SelectValue placeholder="Select the type of inquiry" />
+                    <SelectValue placeholder="Select inquiry type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="viewing">🏠 Schedule a Property Viewing</SelectItem>
-                    <SelectItem value="information">📋 Request Property Information</SelectItem>
-                    <SelectItem value="offer">💰 Make an Offer</SelectItem>
-                    <SelectItem value="selling">🏡 Selling My Property</SelectItem>
-                    <SelectItem value="renting">🔑 Rental Inquiry</SelectItem>
-                    <SelectItem value="investment">📈 Investment Opportunities</SelectItem>
-                    <SelectItem value="general">💬 General Question</SelectItem>
-                    <SelectItem value="partnership">🤝 Business Partnership</SelectItem>
+                    <SelectItem value="viewing">Schedule Viewing</SelectItem>
+                    <SelectItem value="information">Property Info</SelectItem>
+                    <SelectItem value="offer">Make Offer</SelectItem>
+                    <SelectItem value="selling">Selling Property</SelectItem>
+                    <SelectItem value="renting">Rental Inquiry</SelectItem>
+                    <SelectItem value="investment">Investment</SelectItem>
+                    <SelectItem value="general">General Question</SelectItem>
+                    <SelectItem value="partnership">Partnership</SelectItem>
                   </SelectContent>
                 </Select>
-                <div id="inquiryType-help" className="text-xs text-muted-foreground">
-                  {!errors.inquiryType && "Help us direct your inquiry to the right specialist"}
-                </div>
                 {errors.inquiryType && (
                   <div id="inquiryType-error" className="text-sm text-red-600 flex items-center gap-1" role="alert">
                     <span className="text-red-500">⚠</span>
@@ -356,20 +344,10 @@ export function ContactForm({ title, description, propertyId, agentId }: Contact
                 required
                 aria-required="true"
                 aria-invalid={errors.message ? "true" : "false"}
-                aria-describedby={errors.message ? "message-error" : "message-description"}
+                aria-describedby={errors.message ? "message-error" : undefined}
                 placeholder="Tell us about your real estate needs, timeline, budget, and any specific questions..."
-                className={`flex-1 min-h-[120px] ${errors.message ? "border-red-500 focus:ring-red-500" : ""}`}
+                className={`flex-1 min-h-[120px] text-sm placeholder:text-sm ${errors.message ? "border-red-500 focus:ring-red-500" : ""}`}
               />
-              <div className="flex justify-between items-center">
-                <div id="message-description" className="text-xs text-muted-foreground">
-                  {!errors.message && `${formData.message.length}/500 characters (minimum 10)`}
-                </div>
-                {formData.message.length > 0 && formData.message.length < 10 && fieldTouched.message && (
-                  <div className="text-xs text-amber-600">
-                    {10 - formData.message.length} more characters needed
-                  </div>
-                )}
-              </div>
               {errors.message && (
                 <div id="message-error" className="text-sm text-red-600 flex items-center gap-1" role="alert">
                   <span className="text-red-500">⚠</span>
@@ -392,25 +370,6 @@ export function ContactForm({ title, description, propertyId, agentId }: Contact
             <div id="submit-description" className="sr-only">
               Submit your contact form to send your message to our team.
             </div>
-
-            <p className="text-xs text-muted-foreground text-center">
-              By submitting this form, you agree to our{" "}
-              <button 
-                type="button" 
-                className="underline hover:no-underline focus:outline-2 focus:outline-offset-2 focus:outline-secondary transition-all duration-200 hover:text-primary"
-                onClick={() => toast.info("Privacy policy page would open here")}
-              >
-                privacy policy
-              </button>{" "}
-              and{" "}
-              <button 
-                type="button" 
-                className="underline hover:no-underline focus:outline-2 focus:outline-offset-2 focus:outline-secondary transition-all duration-200 hover:text-primary"
-                onClick={() => toast.info("Terms of service page would open here")}
-              >
-                terms of service
-              </button>.
-            </p>
           </div>
         </form>
       </CardContent>

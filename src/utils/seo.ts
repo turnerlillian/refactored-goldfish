@@ -205,5 +205,11 @@ export const seoConfigs = {
     description: "Expert real estate advice, market insights, and home buying tips from our experienced agents. Stay informed about the latest property trends.",
     keywords: "real estate blog, home buying tips, market insights, property advice, real estate news",
     canonical: "https://rowllyproperties.com/blog"
+  },
+  help: {
+    title: "Help & FAQ - Real Estate Guide | Rowlly Properties",
+    description: "Get expert guidance on buying, renting, and real estate processes. Find answers to common questions about mortgages, inspections, and more.",
+    keywords: "real estate help, FAQ, home buying guide, renting guide, mortgage help, real estate questions, first time buyer",
+    canonical: "https://rowllyproperties.com/help"
   }
 };

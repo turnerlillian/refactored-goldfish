@@ -9,6 +9,7 @@ import { ContactForm } from "../ContactForm";
 import { agents, properties } from "../../data/mockData";
 import { useEffect } from "react";
 import { updatePageSEO, createPersonSchema, createBreadcrumbSchema } from "../../utils/seo";
+import { Breadcrumbs } from "../ui/breadcrumbs";
 
 interface AgentProfilePageProps {
   agentId: string;
@@ -58,6 +59,17 @@ export function AgentProfilePage({ agentId, onNavigate }: AgentProfilePageProps)
 
   return (
     <div>
+      {/* Breadcrumbs */}
+      <div className="container py-0.5 md:py-1">
+        <Breadcrumbs 
+          items={[
+            { label: "About Rowlly", onClick: () => onNavigate("agents") },
+            { label: agent.name, isActive: true }
+          ]}
+          onNavigate={onNavigate}
+        />
+      </div>
+
       {/* Header */}
       <div className="border-b">
         <div className="container py-4">
@@ -206,30 +218,30 @@ export function AgentProfilePage({ agentId, onNavigate }: AgentProfilePageProps)
               </CardHeader>
               <CardContent className="space-y-3">
                 <Button variant="outline" className="w-full justify-start" asChild>
-                  <a href={`tel:${agent.phone}`}>
-                    <Phone className="h-4 w-4 mr-2" />
-                    {agent.phone}
+                  <a href={`tel:${agent.phone}`} className="flex items-center truncate">
+                    <Phone className="h-4 w-4 mr-2 flex-shrink-0" />
+                    <span className="truncate">{agent.phone}</span>
                   </a>
                 </Button>
                 <Button variant="outline" className="w-full justify-start" asChild>
-                  <a href={`mailto:${agent.email}`}>
-                    <Mail className="h-4 w-4 mr-2" />
-                    Email Agent
+                  <a href={`mailto:${agent.email}`} className="flex items-center">
+                    <Mail className="h-4 w-4 mr-2 flex-shrink-0" />
+                    <span>Email Agent</span>
                   </a>
                 </Button>
                 {agent.social.linkedin && (
                   <Button variant="outline" className="w-full justify-start" asChild>
-                    <a href={agent.social.linkedin} target="_blank" rel="noopener noreferrer">
-                      <Linkedin className="h-4 w-4 mr-2" />
-                      LinkedIn
+                    <a href={agent.social.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center">
+                      <Linkedin className="h-4 w-4 mr-2 flex-shrink-0" />
+                      <span>LinkedIn</span>
                     </a>
                   </Button>
                 )}
                 {agent.social.twitter && (
                   <Button variant="outline" className="w-full justify-start" asChild>
-                    <a href={agent.social.twitter} target="_blank" rel="noopener noreferrer">
-                      <Twitter className="h-4 w-4 mr-2" />
-                      Twitter
+                    <a href={agent.social.twitter} target="_blank" rel="noopener noreferrer" className="flex items-center">
+                      <Twitter className="h-4 w-4 mr-2 flex-shrink-0" />
+                      <span>Twitter</span>
                     </a>
                   </Button>
                 )}

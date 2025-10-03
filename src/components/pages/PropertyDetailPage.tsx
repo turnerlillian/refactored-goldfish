@@ -9,16 +9,49 @@ import { ContactForm } from "../ContactForm";
 import { properties, agents } from "../../data/mockData";
 import { ImageWithFallback } from "../ImageWithFallback";
 import { updatePageSEO, createPropertySchema, createBreadcrumbSchema } from "../../utils/seo";
+import { Breadcrumbs } from "../ui/breadcrumbs";
 
 interface PropertyDetailPageProps {
   propertyId: string;
   onNavigate: (page: string, params?: any) => void;
+  favorites?: string[];
+  onToggleFavorite?: (propertyId: string) => void;
 }
 
-export function PropertyDetailPage({ propertyId, onNavigate }: PropertyDetailPageProps) {
+export function PropertyDetailPage({ propertyId, onNavigate, favorites = [], onToggleFavorite }: PropertyDetailPageProps) {
   const property = properties.find((p) => p.id === propertyId);
   const agent = property ? agents.find((a) => a.id === property.agentId) : null;
   const [selectedImage, setSelectedImage] = useState(0);
+  const isFavorited = favorites.includes(propertyId);
+
+  // Handle share functionality
+  const handleShare = async () => {
+    const shareData = {
+      title: property?.title || 'Property',
+      text: `Check out this property: ${property?.title}`,
+      url: window.location.href,
+    };
+
+    try {
+      if (navigator.share && navigator.canShare?.(shareData)) {
+        await navigator.share(shareData);
+      } else {
+        // Fallback: copy to clipboard
+        await navigator.clipboard.writeText(window.location.href);
+        // You could add a toast notification here
+        console.log('Property link copied to clipboard!');
+      }
+    } catch (error) {
+      console.error('Error sharing:', error);
+      // Fallback: copy to clipboard
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        console.log('Property link copied to clipboard!');
+      } catch (clipboardError) {
+        console.error('Failed to copy to clipboard:', clipboardError);
+      }
+    }
+  };
 
   // SEO Optimization
   useEffect(() => {
@@ -59,6 +92,17 @@ export function PropertyDetailPage({ propertyId, onNavigate }: PropertyDetailPag
 
   return (
     <div>
+      {/* Breadcrumbs */}
+      <div className="container py-0.5 md:py-1">
+        <Breadcrumbs 
+          items={[
+            { label: "Search Homes", onClick: () => onNavigate("search") },
+            { label: property.title, isActive: true }
+          ]}
+          onNavigate={onNavigate}
+        />
+      </div>
+
       {/* Header */}
       <div className="border-b">
         <div className="container py-4">
@@ -102,10 +146,28 @@ export function PropertyDetailPage({ propertyId, onNavigate }: PropertyDetailPag
                 className="w-full h-full object-cover"
               />
               <div className="absolute top-4 right-4 flex gap-2">
-                <Button variant="secondary" size="icon">
-                  <Heart className="h-4 w-4" />
+                <Button 
+                  variant="secondary" 
+                  size="icon"
+                  onClick={() => onToggleFavorite?.(propertyId)}
+                  className={`transition-colors ${
+                    isFavorited 
+                      ? "bg-red-100 hover:bg-red-200 text-red-600" 
+                      : "bg-background/80 hover:bg-background"
+                  }`}
+                  aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
+                >
+                  <Heart className={`h-4 w-4 ${
+                    isFavorited ? "fill-current" : ""
+                  }`} />
                 </Button>
-                <Button variant="secondary" size="icon">
+                <Button 
+                  variant="secondary" 
+                  size="icon"
+                  onClick={handleShare}
+                  className="bg-background/80 hover:bg-background"
+                  aria-label="Share property"
+                >
                   <Share2 className="h-4 w-4" />
                 </Button>
               </div>
@@ -171,11 +233,16 @@ export function PropertyDetailPage({ propertyId, onNavigate }: PropertyDetailPag
 
                 <Separator />
 
-                <Button className="w-full" onClick={() => onNavigate("contact")}> 
+                <Button className="w-full" onClick={() => {
+                  const formElement = document.getElementById('schedule-tour-form');
+                  if (formElement) {
+                    formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                }}> 
                   <Calendar className="h-4 w-4 mr-2" />
                   Schedule Tour
                 </Button>
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" className="w-full" onClick={() => onNavigate("contact")}>
                   Request Info
                 </Button>
                 </CardContent>
@@ -239,36 +306,38 @@ export function PropertyDetailPage({ propertyId, onNavigate }: PropertyDetailPag
 
             {/* Financial Information */}
             <Card className="bg-muted/30">
-              <CardContent className="p-8">
-                <h3 className="mb-6 flex items-center gap-2">
+              <CardContent className="p-4 md:p-8">
+                <h3 className="mb-4 md:mb-6 flex items-center gap-2 text-lg md:text-xl font-semibold">
                   <DollarSign className="h-5 w-5" />
                   Financial Information
                 </h3>
-                <div>
-                  <h4 className="mb-3">Tax History</h4>
-                  <div className="space-y-2">
-                    {property.financial.taxHistory.map((tax) => (
-                      <div key={tax.year} className="flex items-center justify-between">
-                        <span className="text-sm text-muted-foreground">{tax.year}</span>
-                        <span>${tax.amount.toLocaleString()}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <Separator />
-
-                <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-6">
                   <div>
-                    <p className="text-sm text-muted-foreground mb-1">Est. Monthly Payment</p>
-                    <p className="text-xl">
-                      ${Math.round((property.price * 0.05) / 12).toLocaleString()}
-                    </p>
-                    <p className="text-xs text-muted-foreground">Based on 20% down, 6.5% APR</p>
+                    <h4 className="mb-3 text-base font-medium">Tax History</h4>
+                    <div className="space-y-3">
+                      {property.financial.taxHistory.map((tax) => (
+                        <div key={tax.year} className="flex items-center justify-between py-2 border-b border-border/50 last:border-0">
+                          <span className="text-sm text-muted-foreground font-medium">{tax.year}</span>
+                          <span className="font-semibold">${tax.amount.toLocaleString()}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Price per Sqft</p>
-                    <p className="text-xl">${property.financial.pricePerSqft}</p>
+
+                  <Separator className="my-6" />
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <p className="text-sm text-muted-foreground font-medium">Est. Monthly Payment</p>
+                      <p className="text-2xl md:text-xl font-bold text-primary">
+                        ${Math.round((property.price * 0.05) / 12).toLocaleString()}
+                      </p>
+                      <p className="text-xs text-muted-foreground leading-relaxed">Based on 20% down, 6.5% APR</p>
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-sm text-muted-foreground font-medium">Price per Sqft</p>
+                      <p className="text-2xl md:text-xl font-bold text-primary">${property.financial.pricePerSqft}</p>
+                    </div>
                   </div>
                 </div>
               </CardContent>
@@ -276,52 +345,54 @@ export function PropertyDetailPage({ propertyId, onNavigate }: PropertyDetailPag
 
             {/* Neighborhood */}
             <Card className="bg-muted/30">
-              <CardContent className="p-8">
-                <h3 className="mb-6 flex items-center gap-2">
+              <CardContent className="p-4 md:p-8">
+                <h3 className="mb-4 md:mb-6 flex items-center gap-2 text-lg md:text-xl font-semibold">
                   <MapPin className="h-5 w-5" />
                   Neighborhood
                 </h3>
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2">
-                    <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-                    <span>{property.neighborhood.rating}/5</span>
+                <div className="space-y-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+                    <div className="flex items-center gap-2">
+                      <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                      <span className="text-lg font-semibold">{property.neighborhood.rating}/5</span>
+                    </div>
+                    <span className="text-sm text-muted-foreground font-medium">Neighborhood Rating</span>
                   </div>
-                  <span className="text-sm text-muted-foreground">Neighborhood Rating</span>
-                </div>
 
-                <Separator />
+                  <Separator className="my-6" />
 
-                <div>
-                  <h4 className="mb-3">Nearby Schools</h4>
-                  <div className="space-y-2">
-                    {property.neighborhood.schools.map((school, index) => (
-                      <div key={index} className="flex items-center justify-between">
-                        <span className="text-sm">{school.name}</span>
-                        <Badge variant="secondary">{school.rating}/10</Badge>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <Separator />
-
-                <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm text-muted-foreground mb-1">Walk Score</p>
-                    <p className="text-xl">{property.neighborhood.walkScore}/100</p>
+                    <h4 className="mb-4 text-base font-medium">Nearby Schools</h4>
+                    <div className="space-y-3">
+                      {property.neighborhood.schools.map((school, index) => (
+                        <div key={index} className="flex items-center justify-between py-2 border-b border-border/50 last:border-0">
+                          <span className="text-sm font-medium">{school.name}</span>
+                          <Badge variant="secondary" className="font-semibold">{school.rating}/10</Badge>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Transit Score</p>
-                    <p className="text-xl">{property.neighborhood.transitScore}/100</p>
-                  </div>
-                </div>
 
-                {/* Map Placeholder */}
-                <div className="aspect-video bg-muted rounded-lg flex items-center justify-center mt-4">
-                  <div className="text-center text-muted-foreground">
-                    <MapPin className="h-8 w-8 mx-auto mb-2" />
-                    <p className="text-sm">Interactive Map</p>
-                    <p className="text-xs">Google Maps integration would go here</p>
+                  <Separator className="my-6" />
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <p className="text-sm text-muted-foreground font-medium">Walk Score</p>
+                      <p className="text-2xl md:text-xl font-bold text-primary">{property.neighborhood.walkScore}/100</p>
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-sm text-muted-foreground font-medium">Transit Score</p>
+                      <p className="text-2xl md:text-xl font-bold text-primary">{property.neighborhood.transitScore}/100</p>
+                    </div>
+                  </div>
+
+                  {/* Map Placeholder */}
+                  <div className="aspect-video bg-muted rounded-lg flex items-center justify-center mt-6">
+                    <div className="text-center text-muted-foreground">
+                      <MapPin className="h-8 w-8 mx-auto mb-2" />
+                      <p className="text-sm font-medium">Interactive Map</p>
+                      <p className="text-xs">Google Maps integration would go here</p>
+                    </div>
                   </div>
                 </div>
               </CardContent>
@@ -354,15 +425,15 @@ export function PropertyDetailPage({ propertyId, onNavigate }: PropertyDetailPag
 
                   <div className="space-y-2">
                     <Button variant="outline" className="w-full justify-start" asChild>
-                      <a href={`tel:${agent.phone}`}>
-                        <Phone className="h-4 w-4 mr-2" />
-                        {agent.phone}
+                      <a href={`tel:${agent.phone}`} className="flex items-center truncate">
+                        <Phone className="h-4 w-4 mr-2 flex-shrink-0" />
+                        <span className="truncate">{agent.phone}</span>
                       </a>
                     </Button>
                     <Button variant="outline" className="w-full justify-start" asChild>
-                      <a href={`mailto:${agent.email}`}>
-                        <Mail className="h-4 w-4 mr-2" />
-                        Email Agent
+                      <a href={`mailto:${agent.email}`} className="flex items-center">
+                        <Mail className="h-4 w-4 mr-2 flex-shrink-0" />
+                        <span>Email Agent</span>
                       </a>
                     </Button>
                   </div>
@@ -375,7 +446,7 @@ export function PropertyDetailPage({ propertyId, onNavigate }: PropertyDetailPag
             )}
 
             {/* Contact Form */}
-            <div className="max-w-md mx-auto">
+            <div id="schedule-tour-form" className="max-w-md mx-auto">
               <ContactForm
                 title="Schedule a Tour"
                 description="Interested in this property? Fill out the form below."

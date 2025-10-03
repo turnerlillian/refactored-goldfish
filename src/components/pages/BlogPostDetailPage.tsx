@@ -4,6 +4,7 @@ import { Badge } from "../ui/badge";
 import { Card, CardContent } from "../ui/card";
 import { useEffect } from "react";
 import { updatePageSEO, createBreadcrumbSchema } from "../../utils/seo";
+import { Breadcrumbs } from "../ui/breadcrumbs";
 
 interface BlogPostDetailPageProps {
   onNavigate: (page: string, params?: any) => void;
@@ -231,7 +232,18 @@ export function BlogPostDetailPage({ onNavigate, postId }: BlogPostDetailPagePro
 
   return (
     <div>
-      <div className="container py-12">
+      {/* Breadcrumbs */}
+      <div className="container py-0.5 md:py-1">
+        <Breadcrumbs 
+          items={[
+            { label: "Blog", onClick: () => onNavigate("blog") },
+            { label: post.title, isActive: true }
+          ]}
+          onNavigate={onNavigate}
+        />
+      </div>
+
+      <div className="container py-4 md:py-6">
         {/* Back Button */}
         <Button 
           variant="ghost" 
@@ -366,7 +378,11 @@ export function BlogPostDetailPage({ onNavigate, postId }: BlogPostDetailPagePro
               <h2 className="text-2xl font-bold mb-6">Related Articles</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {relatedPosts.map((relatedPost) => (
-                  <Card key={relatedPost.id} className="group overflow-hidden hover-lift border-0 modern-shadow cursor-pointer bg-background/90 backdrop-blur-sm hover:bg-background transition-all duration-300">
+                  <Card 
+                    key={relatedPost.id} 
+                    className="group overflow-hidden hover-lift border-0 modern-shadow cursor-pointer bg-background/90 backdrop-blur-sm hover:bg-background transition-all duration-300"
+                    onClick={() => onNavigate("blog-post", { id: relatedPost.id })}
+                  >
                     <div className="relative aspect-[16/10] overflow-hidden">
                       <img
                         src={relatedPost.image}
@@ -379,10 +395,7 @@ export function BlogPostDetailPage({ onNavigate, postId }: BlogPostDetailPagePro
                     </div>
                     
                     <CardContent className="p-6">
-                      <h3 
-                        className="text-xl font-bold leading-tight group-hover:text-primary transition-colors duration-300 mb-3 cursor-pointer"
-                        onClick={() => onNavigate("blog-post", { id: relatedPost.id })}
-                      >
+                      <h3 className="text-xl font-bold leading-tight group-hover:text-primary transition-colors duration-300 mb-3">
                         {relatedPost.title}
                       </h3>
                       

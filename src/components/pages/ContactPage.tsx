@@ -4,14 +4,30 @@ import { Input } from "../ui/input";
 import { ContactForm } from "../ContactForm";
 import { useEffect } from "react";
 import { updatePageSEO, seoConfigs } from "../../utils/seo";
+import { Breadcrumbs } from "../ui/breadcrumbs";
 
-export function ContactPage() {
+interface ContactPageProps {
+  onNavigate: (page: string, params?: any) => void;
+}
+
+export function ContactPage({ onNavigate }: ContactPageProps) {
   // SEO Optimization
   useEffect(() => {
     updatePageSEO(seoConfigs.contact);
   }, []);
   return (
-    <div className="container py-12">
+    <div>
+      {/* Breadcrumbs */}
+      <div className="container py-0.5 md:py-1">
+        <Breadcrumbs 
+          items={[
+            { label: "Contact Us", isActive: true }
+          ]}
+          onNavigate={onNavigate}
+        />
+      </div>
+
+      <div className="container py-4 md:py-6">
       <div className="max-w-3xl mx-auto text-center mb-12">
         <h1>Ready to Get Started?</h1>
         <p className="text-lg text-muted-foreground mt-4">
@@ -151,6 +167,7 @@ export function ContactPage() {
           </CardContent>
         </Card>
       </div>
+    </div>
     </div>
   );
 }

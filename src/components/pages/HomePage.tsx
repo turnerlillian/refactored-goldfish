@@ -1,4 +1,4 @@
-import { Search, TrendingUp, Award, Users, ArrowRight } from "lucide-react";
+import { Search, TrendingUp, Award, Users, ArrowRight, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Card, CardContent } from "../ui/card";
@@ -134,7 +134,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
                       <Input
                         id="property-search"
                         type="search"
-                        placeholder={isFocused ? "Type to search..." : "Search by location, property type, or features..."}
+                        placeholder={isFocused || searchQuery ? "" : "Search by location, property type, or features..."}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         onFocus={handleSearchFocus}
@@ -143,8 +143,18 @@ export function HomePage({ onNavigate }: HomePageProps) {
                         aria-expanded={showSearchSuggestions && filteredSuggestions.length > 0}
                         aria-haspopup="listbox"
                         role="combobox"
-                        className="pl-10 h-12 border-0 bg-transparent text-base text-primary-foreground placeholder:text-primary-foreground/70 focus-visible:ring-2 focus-visible:ring-secondary/50"
+                        className="pl-10 pr-12 h-12 border-0 bg-transparent text-sm text-primary-foreground placeholder:text-primary-foreground/70 placeholder:text-ellipsis placeholder:text-sm focus-visible:ring-2 focus-visible:ring-secondary/50"
                       />
+                      {searchQuery && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0 text-primary-foreground/70 hover:text-primary-foreground"
+                          onClick={() => setSearchQuery("")}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      )}
                       <div id="search-description" className="sr-only">
                         Enter keywords to search for properties. Use suggestions or press enter to search.
                       </div>

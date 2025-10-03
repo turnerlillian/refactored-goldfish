@@ -1,4 +1,4 @@
-import { Home, Mail, Phone, Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
+import { KeyRound, Home, Mail, Phone, Facebook, Instagram, Linkedin, Twitter, Heart } from "lucide-react";
 
 interface FooterProps {
   onNavigate?: (page: string) => void;
@@ -14,17 +14,17 @@ export function Footer({ onNavigate }: FooterProps) {
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary shadow-lg">
-                <Home className="h-6 w-6 text-primary-foreground" aria-hidden="true" />
+                <KeyRound className="h-6 w-6 text-primary-foreground" aria-hidden="true" />
               </div>
               <div className="flex flex-col">
                 <span className="text-lg font-bold text-primary font-display">Rowlly Properties</span>
                 <span className="text-xs text-muted-foreground font-medium tracking-wide">
-                  LICENSED REAL ESTATE BROKERAGE
+                  LICENSED REAL ESTATE PROFESSIONALS
                 </span>
               </div>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Award-winning real estate professionals serving clients with integrity and expertise since 2009. 
+              Award-winning real estate brokerage serving clients with integrity and expertise since 2009. 
               Licensed, bonded, and committed to exceptional results.
             </p>
             <nav aria-label="Social media links">
@@ -124,6 +124,24 @@ export function Footer({ onNavigate }: FooterProps) {
                     aria-label="Read our real estate blog"
                   >
                     Blog
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => onNavigate?.("favorites")} 
+                    className="hover:text-primary transition-all duration-200 focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded px-2 py-1 hover:bg-primary/10 border border-transparent hover:border-primary/20 w-full text-left text-muted-foreground hover:scale-[1.02]"
+                    aria-label="View your favorite properties"
+                  >
+                    Favorites
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => onNavigate?.("help")} 
+                    className="hover:text-primary transition-all duration-200 focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded px-2 py-1 hover:bg-primary/10 border border-transparent hover:border-primary/20 w-full text-left text-muted-foreground hover:scale-[1.02]"
+                    aria-label="Get help and find answers to common questions"
+                  >
+                    Help & FAQ
                   </button>
                 </li>
               </ul>

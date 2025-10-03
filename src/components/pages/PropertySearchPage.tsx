@@ -11,6 +11,7 @@ import { Badge } from "../ui/badge";
 import { PropertyCard } from "../PropertyCard";
 import { properties } from "../../data/mockData";
 import { updatePageSEO, seoConfigs } from "../../utils/seo";
+import { Breadcrumbs } from "../ui/breadcrumbs";
 
 interface PropertySearchPageProps {
   onNavigate: (page: string, params?: any) => void;
@@ -112,6 +113,17 @@ export function PropertySearchPage({
       });
     }
   }, [onToggleCompare]);
+
+  const handleClearAllCompare = useCallback(() => {
+    if (onToggleCompare) {
+      // If using parent state, clear each item individually to trigger parent updates
+      currentCompareList.forEach(id => onToggleCompare(id));
+    } else {
+      // Clear local state
+      setLocalCompareList([]);
+      localStorage.setItem('property-compare', JSON.stringify([]));
+    }
+  }, [onToggleCompare, currentCompareList]);
 
   // Simulate loading when filters change
   useEffect(() => {
@@ -297,7 +309,7 @@ export function PropertySearchPage({
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
           <Input
             id="search"
-            placeholder={searchFocused || filters.search ? "" : "Search..."}
+            placeholder={searchFocused || filters.search ? "" : "Search properties..."}
             value={filters.search}
             onChange={(e) => {
               setFilters({ ...filters, search: e.target.value });
@@ -311,7 +323,7 @@ export function PropertySearchPage({
               setSearchFocused(false);
               setTimeout(() => setShowSuggestions(false), 200);
             }}
-            className="pl-10 pr-20"
+            className="pl-10 pr-20 text-sm placeholder:text-ellipsis placeholder:text-sm"
           />
           {filters.search && (
             <Button
@@ -352,7 +364,7 @@ export function PropertySearchPage({
           value={filters.propertyType}
           onValueChange={(value: string) => setFilters({ ...filters, propertyType: value })}
         >
-          <SelectTrigger id="propertyType">
+          <SelectTrigger id="propertyType" className="truncate">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -389,7 +401,7 @@ export function PropertySearchPage({
             value={filters.bedrooms}
             onValueChange={(value: string) => setFilters({ ...filters, bedrooms: value })}
           >
-            <SelectTrigger id="bedrooms">
+            <SelectTrigger id="bedrooms" className="truncate">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -409,7 +421,7 @@ export function PropertySearchPage({
             value={filters.bathrooms}
             onValueChange={(value: string) => setFilters({ ...filters, bathrooms: value })}
           >
-            <SelectTrigger id="bathrooms">
+            <SelectTrigger id="bathrooms" className="truncate">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -447,7 +459,7 @@ export function PropertySearchPage({
             value={filters.status}
             onValueChange={(value: string) => setFilters({ ...filters, status: value })}
           >
-            <SelectTrigger id="status">
+            <SelectTrigger id="status" className="truncate">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -465,7 +477,7 @@ export function PropertySearchPage({
             value={filters.featured}
             onValueChange={(value: string) => setFilters({ ...filters, featured: value })}
           >
-            <SelectTrigger id="featured">
+            <SelectTrigger id="featured" className="truncate">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -502,7 +514,17 @@ export function PropertySearchPage({
 
   return (
     <div>
-      <div className="container py-12">
+      {/* Breadcrumbs */}
+      <div className="container py-0.5 md:py-1">
+        <Breadcrumbs 
+          items={[
+            { label: "Search Homes", isActive: true }
+          ]}
+          onNavigate={onNavigate}
+        />
+      </div>
+
+      <div className="container py-4 md:py-6">
         {/* Enhanced Header with Search Stats and Controls */}
         <div className="space-y-4 mb-6">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -524,13 +546,32 @@ export function PropertySearchPage({
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
+            {/* Favorites Button */}
+            <Button
+              variant="outline"
+              onClick={() => onNavigate("favorites")}
+              className="h-10 px-3 py-2 flex items-center gap-2 justify-between text-sm font-normal border-border/50"
+            >
+              <div className="flex items-center gap-2">
+                <span className="text-red-500">❤</span>
+                <span className="hidden sm:inline font-normal">Favorites</span>
+              </div>
+              {favorites.length > 0 && (
+                <span className="bg-primary text-primary-foreground text-xs rounded-full px-2 py-0.5 min-w-[20px] h-5 flex items-center justify-center ml-2">
+                  {favorites.length}
+                </span>
+              )}
+            </Button>
+
             {/* View Mode Toggle */}
-            <div className="hidden sm:flex border rounded-lg p-1">
+            <div className="hidden sm:flex rounded-lg overflow-hidden border h-10 items-stretch">
               <Button
                 variant={viewMode === "grid" ? "default" : "ghost"}
                 size="sm"
                 onClick={() => setViewMode("grid")}
-                className="h-8 w-8 p-0"
+                className={`h-full w-10 p-0 border-0 flex items-center justify-center ${
+                  viewMode === "grid" ? "rounded-l-md rounded-r-none" : "rounded-none"
+                }`}
               >
                 <Grid className="h-4 w-4" />
               </Button>
@@ -538,7 +579,9 @@ export function PropertySearchPage({
                 variant={viewMode === "list" ? "default" : "ghost"}
                 size="sm"
                 onClick={() => setViewMode("list")}
-                className="h-8 w-8 p-0"
+                className={`h-full w-10 p-0 border-0 flex items-center justify-center ${
+                  viewMode === "list" ? "rounded-r-md rounded-l-none" : "rounded-none"
+                }`}
               >
                 <List className="h-4 w-4" />
               </Button>
@@ -549,7 +592,7 @@ export function PropertySearchPage({
               value={filters.sortBy}
               onValueChange={(value: string) => setFilters({ ...filters, sortBy: value })}
             >
-              <SelectTrigger className="w-[200px]">
+              <SelectTrigger className="w-[200px] h-10 truncate">
                 <ArrowUpDown className="h-4 w-4 mr-2" />
                 <SelectValue />
               </SelectTrigger>
@@ -572,11 +615,21 @@ export function PropertySearchPage({
                   Filter
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-80">
-                <SheetHeader>
-                  <SheetTitle>Search Filters</SheetTitle>
-                </SheetHeader>
-                <div className="mt-6">
+              <SheetContent side="left" className="w-80 flex flex-col">
+                <div className="flex items-center gap-3 mb-8 px-4 pt-6 flex-shrink-0">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary shadow-sm">
+                    <SlidersHorizontal className="h-5 w-5 text-primary-foreground" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-lg font-bold text-primary font-display">
+                      Search Filters
+                    </span>
+                    <span className="text-xs text-muted-foreground font-medium tracking-wide">
+                      REFINE YOUR SEARCH
+                    </span>
+                  </div>
+                </div>
+                <div className="flex-1 overflow-y-auto px-4 pb-6 fade-in-stagger">
                   {FilterPanel()}
                 </div>
               </SheetContent>
@@ -628,7 +681,7 @@ export function PropertySearchPage({
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setLocalCompareList([])}
+                    onClick={handleClearAllCompare}
                     className="text-xs"
                   >
                     Clear All

@@ -1,4 +1,4 @@
-import { Calendar, User, Clock, ArrowRight, Search, Filter, SortDesc } from "lucide-react";
+import { Calendar, User, Clock, ArrowRight, Search, Filter, SortDesc, X } from "lucide-react";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
@@ -6,6 +6,7 @@ import { Input } from "../ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { useState, useEffect } from "react";
 import { updatePageSEO, seoConfigs } from "../../utils/seo";
+import { Breadcrumbs } from "../ui/breadcrumbs";
 
 interface BlogPageProps {
   onNavigate: (page: string, params?: any) => void;
@@ -15,6 +16,7 @@ export function BlogPage({ onNavigate }: BlogPageProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
+  const [searchFocused, setSearchFocused] = useState(false);
   
   // SEO Optimization
   useEffect(() => {
@@ -104,11 +106,20 @@ export function BlogPage({ onNavigate }: BlogPageProps) {
 
   return (
     <div>
-      <div className="container py-12">
+      <div className="container py-0.5 md:py-1">
+        <Breadcrumbs 
+          items={[
+            { label: "Blog", isActive: true }
+          ]}
+          onNavigate={onNavigate}
+        />
+      </div>
+      
+      <div className="container py-4 md:py-6">
         {/* Header */}
-        <div className="max-w-3xl mx-auto text-center mb-12">
+        <div className="max-w-3xl mx-auto text-center mb-8">
           <h1>Real Estate Blog</h1>
-          <p className="text-lg text-muted-foreground mt-4">
+          <p className="text-lg text-muted-foreground mt-4 mb-4">
             Stay informed with the latest insights, tips, and trends in real estate
           </p>
         </div>
@@ -122,11 +133,25 @@ export function BlogPage({ onNavigate }: BlogPageProps) {
                 <div className="flex-1 relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                   <Input
-                    placeholder="Search blog posts..."
+                    placeholder={searchFocused || searchQuery ? "" : "Search posts..."}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 h-12 border-0 bg-background text-base"
+                    onFocus={() => setSearchFocused(true)}
+                    onBlur={() => {
+                      setTimeout(() => setSearchFocused(false), 200);
+                    }}
+                    className="pl-10 pr-12 h-12 border-0 bg-background text-sm placeholder:text-ellipsis placeholder:text-sm"
                   />
+                  {searchQuery && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0"
+                      onClick={() => setSearchQuery("")}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  )}
                 </div>
                 <Button 
                   variant="outline" 
@@ -166,7 +191,7 @@ export function BlogPage({ onNavigate }: BlogPageProps) {
                 <div className="flex items-center gap-2">
                   <SortDesc className="h-4 w-4 text-muted-foreground" />
                   <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-[140px]">
+                    <SelectTrigger className="w-[140px] truncate">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>

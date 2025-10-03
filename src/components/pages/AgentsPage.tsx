@@ -6,6 +6,7 @@ import { Badge } from "../ui/badge";
 import { agents } from "../../data/mockData";
 import { useEffect } from "react";
 import { updatePageSEO, seoConfigs } from "../../utils/seo";
+import { Breadcrumbs } from "../ui/breadcrumbs";
 
 interface AgentsPageProps {
   onNavigate: (page: string, params?: any) => void;
@@ -17,7 +18,17 @@ export function AgentsPage({ onNavigate }: AgentsPageProps) {
     updatePageSEO(seoConfigs.agents);
   }, []);
   return (
-    <div className="container py-12">
+    <div>
+      <div className="container py-0.5 md:py-1">
+        <Breadcrumbs 
+          items={[
+            { label: "About Rowlly", isActive: true }
+          ]}
+          onNavigate={onNavigate}
+        />
+      </div>
+      
+      <div className="container py-4 md:py-6">
       <div className="max-w-3xl mx-auto text-center mb-12">
         <h1>Meet Your Real Estate Experts</h1>
         <p className="text-lg text-muted-foreground mt-4">
@@ -202,6 +213,7 @@ export function AgentsPage({ onNavigate }: AgentsPageProps) {
             </Button>
           </CardContent>
         </Card>
+        </div>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { Home, Users, Phone, Menu, BookOpen, ChevronDown } from "lucide-react";
+import { KeyRound, Key, Home, Users, Phone, Menu, BookOpen, ChevronDown, HelpCircle, Heart } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { useState } from "react";
@@ -9,16 +9,17 @@ interface HeaderProps {
 }
 
 export function Header({ currentPage, onNavigate }: HeaderProps) {
-  const [isHouseHuntOpen, setIsHouseHuntOpen] = useState(false);
+  const [isSearchHomesOpen, setIsSearchHomesOpen] = useState(false);
   
   const navigation = [
     { name: "Home", href: "home", icon: Home },
     { name: "Blog", href: "blog", icon: BookOpen },
     { name: "About Rowlly", href: "agents", icon: Users },
+    { name: "Help", href: "help", icon: HelpCircle },
     { name: "Contact", href: "contact", icon: Phone },
   ];
 
-  const houseHuntOptions = [
+  const searchHomesOptions = [
     { name: "Buy", href: "search" },
     { name: "Rent", href: "search" },
     { name: "Sell", href: "contact" },
@@ -33,13 +34,13 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
           aria-label="Rowlly Properties - Go to homepage"
         >
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary group-hover:scale-105 group-hover:shadow-lg transition-all duration-200 shadow-md">
-            <Home className="h-6 w-6 text-primary-foreground" aria-hidden="true" />
+            <KeyRound className="h-6 w-6 text-primary-foreground" aria-hidden="true" />
           </div>
-          <div className="flex flex-col">
-            <span className="text-xl font-bold text-primary font-display">
+          <div className="flex flex-col items-start">
+            <span className="text-xl font-bold text-primary font-display text-left">
               Rowlly Properties
             </span>
-            <span className="text-xs text-muted-foreground font-medium tracking-wide">
+            <span className="text-xs text-muted-foreground font-medium tracking-wide text-left">
               LICENSED REAL ESTATE PROFESSIONALS
             </span>
           </div>
@@ -65,17 +66,17 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
           <div className="relative">
             <button
               onClick={() => onNavigate("search")}
-              onMouseEnter={() => setIsHouseHuntOpen(true)}
-              onMouseLeave={() => setIsHouseHuntOpen(false)}
+              onMouseEnter={() => setIsSearchHomesOpen(true)}
+              onMouseLeave={() => setIsSearchHomesOpen(false)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
-                  setIsHouseHuntOpen(!isHouseHuntOpen);
+                  setIsSearchHomesOpen(!isSearchHomesOpen);
                 }
                 if (e.key === 'Escape') {
-                  setIsHouseHuntOpen(false);
+                  setIsSearchHomesOpen(false);
                 }
               }}
-              aria-expanded={isHouseHuntOpen}
+              aria-expanded={isSearchHomesOpen}
               aria-haspopup="menu"
               aria-current={currentPage === "search" ? "page" : undefined}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all duration-200 btn-press focus:outline-2 focus:outline-offset-2 focus:outline-secondary border-2 hover:scale-[1.02] ${
@@ -84,30 +85,30 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
                   : "text-muted-foreground hover:text-primary hover:bg-accent/70 hover:shadow-md border-transparent hover:border-accent/50"
               }`}
             >
-              <Home className="h-4 w-4" aria-hidden="true" />
-              <span>House Hunt</span>
+              <Key className="h-4 w-4" aria-hidden="true" />
+              <span>Search Homes</span>
               <ChevronDown className="h-3 w-3" aria-hidden="true" />
             </button>
             
-            {isHouseHuntOpen && (
+            {isSearchHomesOpen && (
               <div 
-                className={`absolute top-full left-0 mt-1 w-32 bg-background border rounded-md shadow-lg z-50 dropdown-enter dropdown-enter-active`}
+                className={`absolute top-full left-0 mt-1 w-full bg-background border rounded-md shadow-lg z-50 dropdown-enter dropdown-enter-active`}
                 role="menu"
-                aria-label="House hunt options"
-                onMouseEnter={() => setIsHouseHuntOpen(true)}
-                onMouseLeave={() => setIsHouseHuntOpen(false)}
+                aria-label="Search homes options"
+                onMouseEnter={() => setIsSearchHomesOpen(true)}
+                onMouseLeave={() => setIsSearchHomesOpen(false)}
               >
-                {houseHuntOptions.map((option, index) => (
+                {searchHomesOptions.map((option, index) => (
                   <button
                     key={option.name}
                     role="menuitem"
                     onClick={() => {
                       onNavigate(option.href);
-                      setIsHouseHuntOpen(false);
+                      setIsSearchHomesOpen(false);
                     }}
                     onKeyDown={(e) => {
                       if (e.key === 'Escape') {
-                        setIsHouseHuntOpen(false);
+                        setIsSearchHomesOpen(false);
                       }
                     }}
                     className="w-full text-left px-4 py-2 hover:bg-primary/10 focus:bg-primary/10 focus:outline-2 focus:outline-offset-2 focus:outline-secondary transition-all duration-150 btn-press"
@@ -147,8 +148,8 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
               <Menu className="h-5 w-5" aria-hidden="true" />
             </button>
           </SheetTrigger>
-          <SheetContent side="right" className="w-80">
-            <div className="flex items-center gap-3 mb-8 px-4 pt-6">
+          <SheetContent side="right" className="w-80 flex flex-col animate-in slide-in-from-right duration-300">
+            <div className="flex items-center gap-3 mb-4 px-4 pt-6 flex-shrink-0 animate-in fade-in-50 slide-in-from-top-2 duration-500 delay-100">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary shadow-sm">
                 <Home className="h-5 w-5 text-primary-foreground" />
               </div>
@@ -162,7 +163,7 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
               </div>
             </div>
             
-            <nav className="flex flex-col gap-2 px-4" role="navigation" aria-label="Mobile navigation">
+            <nav className="flex flex-col gap-2 px-4 pb-6 flex-1 overflow-y-auto animate-in fade-in-50 slide-in-from-bottom-4 duration-700 delay-200" role="navigation" aria-label="Mobile navigation">
               {/* Home Button */}
               <button
                 onClick={() => onNavigate("home")}
@@ -177,22 +178,29 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
                 <span className="font-medium">Home</span>
               </button>
               
-              {/* House Hunt Section */}
-              <div className="border-l-2 border-primary/20 pl-4 ml-4 fade-in-stagger">
-                <h3 className="text-sm font-medium text-muted-foreground mb-2">House Hunt</h3>
-                {houseHuntOptions.map((option, index) => (
+              {/* Search Homes Section */}
+              <button
+                onClick={() => onNavigate("search")}
+                aria-current={currentPage === "search" ? "page" : undefined}
+                className={`flex items-center gap-3 p-4 rounded-xl transition-all duration-200 text-left focus:outline-2 focus:outline-offset-2 focus:outline-secondary btn-press fade-in-stagger ${
+                  currentPage === "search"
+                    ? "bg-primary text-primary-foreground shadow-md"
+                    : "hover:bg-accent hover:shadow-sm"
+                }`}
+              >
+                <Key className="h-5 w-5" aria-hidden="true" />
+                <span className="font-medium">Search Homes</span>
+              </button>
+              
+              {/* Quick Actions */}
+              <div className="ml-8 space-y-1 fade-in-stagger">
+                {searchHomesOptions.map((option, index) => (
                   <button
                     key={option.name}
                     onClick={() => onNavigate(option.href)}
-                    aria-current={currentPage === option.href ? "page" : undefined}
-                    className={`flex items-center gap-3 p-3 rounded-xl transition-all duration-200 text-left w-full mb-1 focus:outline-2 focus:outline-offset-2 focus:outline-secondary btn-press ${
-                      currentPage === option.href
-                        ? "bg-primary text-primary-foreground shadow-md"
-                        : "hover:bg-accent hover:shadow-sm"
-                    }`}
+                    className="flex items-center gap-3 p-3 rounded-xl transition-all duration-200 text-left w-full focus:outline-2 focus:outline-offset-2 focus:outline-secondary btn-press text-muted-foreground hover:text-foreground hover:bg-accent hover:shadow-sm"
                     style={{ animationDelay: `${(index + 2) * 100}ms` }}
                   >
-                    <Home className="h-4 w-4" aria-hidden="true" />
                     <span className="font-medium">{option.name}</span>
                   </button>
                 ))}

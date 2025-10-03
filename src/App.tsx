@@ -11,8 +11,11 @@ import { ContactPage } from "./components/pages/ContactPage";
 import { BlogPage } from "./components/pages/BlogPage";
 import { BlogPostDetailPage } from "./components/pages/BlogPostDetailPage";
 import { PropertyComparisonPage } from "./components/pages/PropertyComparisonPage";
+import { HelpPage } from "./components/pages/HelpPage";
+import { FavoritesPage } from "./components/pages/FavoritesPage";
+import { QuickContactWidget } from "./components/QuickContactWidget";
 
-type Page = "home" | "search" | "property" | "agents" | "agent" | "contact" | "blog" | "blog-post" | "compare";
+type Page = "home" | "search" | "property" | "agents" | "agent" | "contact" | "blog" | "blog-post" | "compare" | "help" | "favorites";
 
 interface NavigationParams {
   id?: string;
@@ -97,9 +100,13 @@ export default function App() {
     } else if (path.startsWith("/blog/")) {
       const id = path.split("/blog/")[1];
       return { page: "blog-post" as Page, params: { id } };
+    } else if (path === "/favorites") {
+      return { page: "favorites" as Page };
     } else if (path === "/compare") {
       const properties = searchParams.get("properties")?.split(",") || [];
       return { page: "compare" as Page, params: { properties } };
+    } else if (path === "/help") {
+      return { page: "help" as Page, params: {} };
     }
     
     // Default to home for unknown paths
@@ -147,8 +154,12 @@ export default function App() {
       url = "/contact";
     } else if (newPage === "blog") {
       url = "/blog";
+    } else if (newPage === "favorites") {
+      url = "/favorites";
     } else if (newPage === "compare" && params?.properties) {
       url = `/compare?properties=${params.properties.join(",")}`;
+    } else if (newPage === "help") {
+      url = "/help";
     }
     
     // Push new state to browser history
@@ -187,6 +198,8 @@ export default function App() {
           <PropertyDetailPage 
             propertyId={navParams.id} 
             onNavigate={handleNavigate}
+            favorites={favorites}
+            onToggleFavorite={handleToggleFavorite}
           />
         )}
         {currentPage === "agents" && <AgentsPage onNavigate={handleNavigate} />}
@@ -196,7 +209,7 @@ export default function App() {
             onNavigate={handleNavigate}
           />
         )}
-        {currentPage === "contact" && <ContactPage />}
+        {currentPage === "contact" && <ContactPage onNavigate={handleNavigate} />}
         {currentPage === "blog" && <BlogPage onNavigate={handleNavigate} />}
         {currentPage === "blog-post" && navParams.id && (
           <BlogPostDetailPage 
@@ -210,9 +223,20 @@ export default function App() {
             propertyIds={navParams.properties}
           />
         )}
+        {currentPage === "help" && <HelpPage onNavigate={handleNavigate} />}
+        {currentPage === "favorites" && (
+          <FavoritesPage 
+            onNavigate={handleNavigate}
+            favorites={favorites}
+            onToggleFavorite={handleToggleFavorite}
+            compareList={compareList}
+            onToggleCompare={handleToggleCompare}
+          />
+        )}
       </main>
 
       <Footer onNavigate={handleNavigate} />
+      <QuickContactWidget onNavigate={handleNavigate} />
       <Toaster />
     </div>
   );
