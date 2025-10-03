@@ -10,17 +10,65 @@ import { AgentProfilePage } from "./components/pages/AgentProfilePage";
 import { ContactPage } from "./components/pages/ContactPage";
 import { BlogPage } from "./components/pages/BlogPage";
 import { BlogPostDetailPage } from "./components/pages/BlogPostDetailPage";
+import { PropertyComparisonPage } from "./components/pages/PropertyComparisonPage";
 
-type Page = "home" | "search" | "property" | "agents" | "agent" | "contact" | "blog" | "blog-post";
+type Page = "home" | "search" | "property" | "agents" | "agent" | "contact" | "blog" | "blog-post" | "compare";
 
 interface NavigationParams {
   id?: string;
   query?: string;
+  properties?: string[];
 }
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>("home");
   const [navParams, setNavParams] = useState<NavigationParams>({});
+  const [favorites, setFavorites] = useState<string[]>([]);
+  const [compareList, setCompareList] = useState<string[]>([]);
+
+  // Load favorites and compare list from localStorage on mount
+  useEffect(() => {
+    const savedFavorites = localStorage.getItem('property-favorites');
+    if (savedFavorites) {
+      try {
+        setFavorites(JSON.parse(savedFavorites));
+      } catch (e) {
+        console.error('Failed to parse saved favorites:', e);
+      }
+    }
+
+    const savedCompare = localStorage.getItem('property-compare');
+    if (savedCompare) {
+      try {
+        setCompareList(JSON.parse(savedCompare));
+      } catch (e) {
+        console.error('Failed to parse saved compare list:', e);
+      }
+    }
+  }, []);
+
+  // Handlers for favorites and compare
+  const handleToggleFavorite = (propertyId: string) => {
+    setFavorites(prev => {
+      const newFavorites = prev.includes(propertyId)
+        ? prev.filter(id => id !== propertyId)
+        : [...prev, propertyId];
+      localStorage.setItem('property-favorites', JSON.stringify(newFavorites));
+      return newFavorites;
+    });
+  };
+
+  const handleToggleCompare = (propertyId: string) => {
+    setCompareList(prev => {
+      const newCompareList = prev.includes(propertyId)
+        ? prev.filter(id => id !== propertyId)
+        : prev.length < 3 // Limit to 3 properties for comparison
+          ? [...prev, propertyId]
+          : prev; // Don't add if already at limit
+      localStorage.setItem('property-compare', JSON.stringify(newCompareList));
+      return newCompareList;
+    });
+  };
 
   // Function to parse URL and get current page/params
   const parseUrl = () => {
@@ -49,6 +97,9 @@ export default function App() {
     } else if (path.startsWith("/blog/")) {
       const id = path.split("/blog/")[1];
       return { page: "blog-post" as Page, params: { id } };
+    } else if (path === "/compare") {
+      const properties = searchParams.get("properties")?.split(",") || [];
+      return { page: "compare" as Page, params: { properties } };
     }
     
     // Default to home for unknown paths
@@ -96,6 +147,8 @@ export default function App() {
       url = "/contact";
     } else if (newPage === "blog") {
       url = "/blog";
+    } else if (newPage === "compare" && params?.properties) {
+      url = `/compare?properties=${params.properties.join(",")}`;
     }
     
     // Push new state to browser history
@@ -108,14 +161,26 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      {/* Skip link for keyboard navigation */}
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-primary text-primary-foreground px-4 py-2 rounded z-50 focus:outline-2 focus:outline-offset-2 focus:outline-secondary"
+      >
+        Skip to main content
+      </a>
+      
       <Header currentPage={currentPage} onNavigate={handleNavigate} />
       
-      <main className="flex-1">
+      <main id="main-content" className="flex-1" role="main">
         {currentPage === "home" && <HomePage onNavigate={handleNavigate} />}
         {currentPage === "search" && (
           <PropertySearchPage 
             onNavigate={handleNavigate} 
             initialQuery={navParams.query}
+            favorites={favorites}
+            onToggleFavorite={handleToggleFavorite}
+            compareList={compareList}
+            onToggleCompare={handleToggleCompare}
           />
         )}
         {currentPage === "property" && navParams.id && (
@@ -137,6 +202,12 @@ export default function App() {
           <BlogPostDetailPage 
             postId={navParams.id} 
             onNavigate={handleNavigate}
+          />
+        )}
+        {currentPage === "compare" && navParams.properties && (
+          <PropertyComparisonPage 
+            onNavigate={handleNavigate}
+            propertyIds={navParams.properties}
           />
         )}
       </main>

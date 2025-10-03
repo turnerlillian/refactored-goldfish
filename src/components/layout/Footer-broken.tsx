@@ -37,7 +37,7 @@ export function Footer({ onNavigate }: FooterProps) {
                     aria-label="Follow us on Facebook"
                     className="group focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded-lg"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-background/95 backdrop-blur-sm border-2 border-muted/30 hover:border-primary/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-200 shadow-sm btn-press hover:scale-110">
+                    <div className="w-10 h-10 rounded-lg bg-background/80 backdrop-blur-sm border border-background/20 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300 hover:scale-110 shadow-sm">
                       <Facebook className="h-4 w-4" aria-hidden="true" />
                     </div>
                   </a>
@@ -50,7 +50,7 @@ export function Footer({ onNavigate }: FooterProps) {
                     aria-label="Follow us on Instagram"
                     className="group focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded-lg"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-background/95 backdrop-blur-sm border-2 border-muted/30 hover:border-primary/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-200 shadow-sm btn-press hover:scale-110">
+                    <div className="w-10 h-10 rounded-lg bg-background/80 backdrop-blur-sm border border-background/20 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300 hover:scale-110 shadow-sm">
                       <Instagram className="h-4 w-4" aria-hidden="true" />
                     </div>
                   </a>
@@ -63,7 +63,7 @@ export function Footer({ onNavigate }: FooterProps) {
                     aria-label="Connect with us on LinkedIn"
                     className="group focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded-lg"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-background/95 backdrop-blur-sm border-2 border-muted/30 hover:border-primary/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-200 shadow-sm btn-press hover:scale-110">
+                    <div className="w-10 h-10 rounded-lg bg-background/80 backdrop-blur-sm border border-background/20 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300 hover:scale-110 shadow-sm">
                       <Linkedin className="h-4 w-4" aria-hidden="true" />
                     </div>
                   </a>
@@ -76,7 +76,7 @@ export function Footer({ onNavigate }: FooterProps) {
                     aria-label="Follow us on Twitter"
                     className="group focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded-lg"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-background/95 backdrop-blur-sm border-2 border-muted/30 hover:border-primary/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-200 shadow-sm btn-press hover:scale-110">
+                    <div className="w-10 h-10 rounded-lg bg-background/80 backdrop-blur-sm border border-background/20 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300 hover:scale-110 shadow-sm">
                       <Twitter className="h-4 w-4" aria-hidden="true" />
                     </div>
                   </a>
@@ -84,16 +84,18 @@ export function Footer({ onNavigate }: FooterProps) {
               </ul>
             </nav>
           </div>
+            </div>
+          </div>
 
           {/* Quick Links */}
           <div>
             <h4 className="mb-4 text-primary font-semibold">Quick Links</h4>
             <nav aria-label="Quick navigation links">
-              <ul className="space-y-2 text-sm" role="list">
+              <ul className="space-y-2 text-sm text-muted-foreground" role="list">
                 <li>
                   <button 
                     onClick={() => onNavigate?.("agents")} 
-                    className="hover:text-primary transition-all duration-200 focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded px-2 py-1 hover:bg-primary/10 border border-transparent hover:border-primary/20 w-full text-left text-muted-foreground hover:scale-[1.02]"
+                    className="hover:text-primary transition-colors focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded"
                     aria-label="Learn about our team and company"
                   >
                     About Us
@@ -102,7 +104,7 @@ export function Footer({ onNavigate }: FooterProps) {
                 <li>
                   <button 
                     onClick={() => onNavigate?.("search")} 
-                    className="hover:text-primary transition-all duration-200 focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded px-2 py-1 hover:bg-primary/10 border border-transparent hover:border-primary/20 w-full text-left text-muted-foreground hover:scale-[1.02]"
+                    className="hover:text-primary transition-colors focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded"
                     aria-label="Browse available properties"
                   >
                     Properties
@@ -111,7 +113,7 @@ export function Footer({ onNavigate }: FooterProps) {
                 <li>
                   <button 
                     onClick={() => onNavigate?.("agents")} 
-                    className="hover:text-primary transition-all duration-200 focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded px-2 py-1 hover:bg-primary/10 border border-transparent hover:border-primary/20 w-full text-left text-muted-foreground hover:scale-[1.02]"
+                    className="hover:text-primary transition-colors focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded"
                     aria-label="Meet our real estate agents"
                   >
                     Agents
@@ -120,7 +122,7 @@ export function Footer({ onNavigate }: FooterProps) {
                 <li>
                   <button 
                     onClick={() => onNavigate?.("blog")} 
-                    className="hover:text-primary transition-all duration-200 focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded px-2 py-1 hover:bg-primary/10 border border-transparent hover:border-primary/20 w-full text-left text-muted-foreground hover:scale-[1.02]"
+                    className="hover:text-primary transition-colors focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded"
                     aria-label="Read our real estate blog"
                   >
                     Blog
@@ -134,11 +136,11 @@ export function Footer({ onNavigate }: FooterProps) {
           <div>
             <h4 className="mb-4 text-primary font-semibold">Services</h4>
             <nav aria-label="Our services">
-              <ul className="space-y-2 text-sm" role="list">
+              <ul className="space-y-2 text-sm text-muted-foreground" role="list">
                 <li>
                   <button 
                     onClick={() => onNavigate?.("search")} 
-                    className="hover:text-primary transition-all duration-200 focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded px-2 py-1 hover:bg-primary/10 border border-transparent hover:border-primary/20 w-full text-left text-muted-foreground hover:scale-[1.02]"
+                    className="hover:text-primary transition-colors focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded"
                     aria-label="Find homes for purchase"
                   >
                     Buy a Home
@@ -147,7 +149,7 @@ export function Footer({ onNavigate }: FooterProps) {
                 <li>
                   <button 
                     onClick={() => onNavigate?.("contact")} 
-                    className="hover:text-primary transition-all duration-200 focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded px-2 py-1 hover:bg-primary/10 border border-transparent hover:border-primary/20 w-full text-left text-muted-foreground hover:scale-[1.02]"
+                    className="hover:text-primary transition-colors focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded"
                     aria-label="Get help selling your property"
                   >
                     Sell Your Home
@@ -156,7 +158,7 @@ export function Footer({ onNavigate }: FooterProps) {
                 <li>
                   <button 
                     onClick={() => onNavigate?.("search")} 
-                    className="hover:text-primary transition-all duration-200 focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded px-2 py-1 hover:bg-primary/10 border border-transparent hover:border-primary/20 w-full text-left text-muted-foreground hover:scale-[1.02]"
+                    className="hover:text-primary transition-colors focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded"
                     aria-label="Find rental properties"
                   >
                     Rent a Property
@@ -165,7 +167,7 @@ export function Footer({ onNavigate }: FooterProps) {
                 <li>
                   <button 
                     onClick={() => onNavigate?.("contact")} 
-                    className="hover:text-primary transition-all duration-200 focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded px-2 py-1 hover:bg-primary/10 border border-transparent hover:border-primary/20 w-full text-left text-muted-foreground hover:scale-[1.02]"
+                    className="hover:text-primary transition-colors focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded"
                     aria-label="Learn about property management services"
                   >
                     Property Management
@@ -184,7 +186,7 @@ export function Footer({ onNavigate }: FooterProps) {
                   <Phone className="h-4 w-4 mt-0.5 flex-shrink-0 text-primary" aria-hidden="true" />
                   <a 
                     href="tel:+15550000000" 
-                    className="hover:text-primary transition-all duration-200 focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded px-1 py-0.5 hover:bg-primary/10 border border-transparent hover:border-primary/20 hover:scale-[1.02] text-muted-foreground"
+                    className="hover:text-primary transition-colors focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded"
                     aria-label="Call us at (555) 000-0000"
                   >
                     (555) 000-0000
@@ -194,7 +196,7 @@ export function Footer({ onNavigate }: FooterProps) {
                   <Mail className="h-4 w-4 mt-0.5 flex-shrink-0 text-primary" aria-hidden="true" />
                   <a 
                     href="mailto:info@rowlly.com" 
-                    className="hover:text-primary transition-all duration-200 focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded px-1 py-0.5 hover:bg-primary/10 border border-transparent hover:border-primary/20 hover:scale-[1.02] text-muted-foreground"
+                    className="hover:text-primary transition-colors focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded"
                     aria-label="Email us at info@rowlly.com"
                   >
                     info@rowlly.com
@@ -212,9 +214,7 @@ export function Footer({ onNavigate }: FooterProps) {
           </div>
         </div>
 
-        <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} Rowlly Properties. All rights reserved.</p>
-        </div>
+                <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground">\n          <p>&copy; {new Date().getFullYear()} Rowlly Properties. All rights reserved.</p>\n        </div>\n      </div>\n    </footer>\n  );\n}
       </div>
     </footer>
   );

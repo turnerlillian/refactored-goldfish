@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
-import { SlidersHorizontal, X, Search, MapPin, ArrowUpDown, Grid, List } from "lucide-react";
+import { SlidersHorizontal, X, Search, MapPin, ArrowUpDown, Grid, List, Heart, Plus, Minus } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -15,9 +15,20 @@ import { updatePageSEO, seoConfigs } from "../../utils/seo";
 interface PropertySearchPageProps {
   onNavigate: (page: string, params?: any) => void;
   initialQuery?: string;
+  favorites?: string[];
+  onToggleFavorite?: (propertyId: string) => void;
+  compareList?: string[];
+  onToggleCompare?: (propertyId: string) => void;
 }
 
-export function PropertySearchPage({ onNavigate, initialQuery = "" }: PropertySearchPageProps) {
+export function PropertySearchPage({ 
+  onNavigate, 
+  initialQuery = "",
+  favorites = [],
+  onToggleFavorite,
+  compareList = [],
+  onToggleCompare
+}: PropertySearchPageProps) {
   const [filters, setFilters] = useState({
     search: initialQuery,
     propertyType: "all",
@@ -36,8 +47,81 @@ export function PropertySearchPage({ onNavigate, initialQuery = "" }: PropertySe
   const [searchSuggestions, setSearchSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
+  const [isLoadingResults, setIsLoadingResults] = useState(false);
+  
+  // Local state for favorites and compare when no external handlers provided
+  const [localFavorites, setLocalFavorites] = useState<string[]>([]);
+  const [localCompareList, setLocalCompareList] = useState<string[]>([]);
 
-  // SEO Optimization
+  // Load favorites and compare list from localStorage on mount
+  useEffect(() => {
+    if (!onToggleFavorite) {
+      const saved = localStorage.getItem('property-favorites');
+      if (saved) {
+        try {
+          setLocalFavorites(JSON.parse(saved));
+        } catch (e) {
+          console.error('Failed to parse saved favorites:', e);
+        }
+      }
+    }
+    
+    if (!onToggleCompare) {
+      const savedCompare = localStorage.getItem('property-compare');
+      if (savedCompare) {
+        try {
+          setLocalCompareList(JSON.parse(savedCompare));
+        } catch (e) {
+          console.error('Failed to parse saved compare list:', e);
+        }
+      }
+    }
+  }, [onToggleFavorite, onToggleCompare]);
+
+  // Use external or local favorites/compare lists
+  const currentFavorites = favorites.length > 0 ? favorites : localFavorites;
+  const currentCompareList = compareList.length > 0 ? compareList : localCompareList;
+
+  // Handlers for favorites and compare
+  const handleToggleFavorite = useCallback((propertyId: string) => {
+    if (onToggleFavorite) {
+      onToggleFavorite(propertyId);
+    } else {
+      setLocalFavorites(prev => {
+        const newFavorites = prev.includes(propertyId)
+          ? prev.filter(id => id !== propertyId)
+          : [...prev, propertyId];
+        localStorage.setItem('property-favorites', JSON.stringify(newFavorites));
+        return newFavorites;
+      });
+    }
+  }, [onToggleFavorite]);
+
+  const handleToggleCompare = useCallback((propertyId: string) => {
+    if (onToggleCompare) {
+      onToggleCompare(propertyId);
+    } else {
+      setLocalCompareList(prev => {
+        const newCompareList = prev.includes(propertyId)
+          ? prev.filter(id => id !== propertyId)
+          : prev.length < 3 // Limit to 3 properties for comparison
+            ? [...prev, propertyId]
+            : prev; // Don't add if already at limit
+        localStorage.setItem('property-compare', JSON.stringify(newCompareList));
+        return newCompareList;
+      });
+    }
+  }, [onToggleCompare]);
+
+  // Simulate loading when filters change
+  useEffect(() => {
+    setIsLoadingResults(true);
+    const timer = setTimeout(() => {
+      setIsLoadingResults(false);
+    }, 300); // Quick search for better UX
+    
+    return () => clearTimeout(timer);
+  }, [filters]);
   useEffect(() => {
     const searchTitle = filters.search 
       ? `Properties in ${filters.search} - Search Results | Rowlly Properties`
@@ -54,29 +138,65 @@ export function PropertySearchPage({ onNavigate, initialQuery = "" }: PropertySe
     });
   }, [filters.search]);
 
-  // Generate search suggestions
-  const allLocations = useMemo(() => {
+  // Generate comprehensive search suggestions
+  const searchData = useMemo(() => {
     const locations = new Set<string>();
+    const propertyTypes = new Set<string>();
+    const features = new Set<string>();
+    
     properties.forEach(property => {
       locations.add(property.city);
       locations.add(property.state);
       locations.add(`${property.city}, ${property.state}`);
       locations.add(property.zip);
+      locations.add(property.address);
+      
+      propertyTypes.add(property.propertyType);
+      
+      if (property.features) {
+        property.features.forEach(feature => features.add(feature));
+      }
     });
-    return Array.from(locations);
+    
+    return {
+      locations: Array.from(locations),
+      propertyTypes: Array.from(propertyTypes),
+      features: Array.from(features)
+    };
   }, []);
 
-  // Update suggestions based on search input
+  // Enhanced suggestions with categories
   useEffect(() => {
-    if (filters.search && filters.search.length > 0) {
-      const suggestions = allLocations
-        .filter(location => location.toLowerCase().includes(filters.search.toLowerCase()))
-        .slice(0, 5);
-      setSearchSuggestions(suggestions);
+    if (filters.search && filters.search.length > 1) {
+      const query = filters.search.toLowerCase().trim();
+      const suggestions = [];
+      
+      // Location suggestions
+      const locationMatches = searchData.locations
+        .filter(location => location.toLowerCase().includes(query))
+        .slice(0, 3)
+        .map(location => ({ text: location, type: 'location' }));
+      
+      // Property type suggestions
+      const typeMatches = searchData.propertyTypes
+        .filter(type => type.toLowerCase().includes(query))
+        .slice(0, 2)
+        .map(type => ({ text: type, type: 'propertyType' }));
+      
+      // Feature suggestions
+      const featureMatches = searchData.features
+        .filter(feature => feature.toLowerCase().includes(query))
+        .slice(0, 2)
+        .map(feature => ({ text: feature, type: 'feature' }));
+      
+      // Combine all suggestions, prioritizing locations
+      suggestions.push(...locationMatches, ...typeMatches, ...featureMatches);
+      
+      setSearchSuggestions(suggestions.slice(0, 7).map(s => s.text));
     } else {
       setSearchSuggestions([]);
     }
-  }, [filters.search, allLocations]);
+  }, [filters.search, searchData]);
 
   const filteredAndSortedProperties = useMemo(() => {
     let filtered = properties.filter((property) => {
@@ -478,7 +598,65 @@ export function PropertySearchPage({ onNavigate, initialQuery = "" }: PropertySe
 
         {/* Property Results */}
         <div className="lg:col-span-3">
-          {filteredAndSortedProperties.length === 0 ? (
+          {/* Compare Properties Bar */}
+          {currentCompareList.length > 0 && (
+            <div className="mb-6 bg-primary/5 border border-primary/20 rounded-lg p-4">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="font-medium">Compare ({currentCompareList.length}/3):</span>
+                  <div className="flex flex-wrap gap-1">
+                    {currentCompareList.map(id => {
+                      const property = properties.find(p => p.id === id);
+                      return property ? (
+                        <Badge key={id} variant="secondary" className="text-xs">
+                          {property.title.split(' ').slice(0, 2).join(' ')}
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-4 w-4 ml-1 p-0 hover:bg-destructive hover:text-destructive-foreground"
+                            onClick={() => handleToggleCompare(id)}
+                            aria-label={`Remove ${property.title} from comparison`}
+                          >
+                            <X className="h-3 w-3" />
+                          </Button>
+                        </Badge>
+                      ) : null;
+                    })}
+                  </div>
+                </div>
+                <div className="flex gap-2 ml-auto">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setLocalCompareList([])}
+                    className="text-xs"
+                  >
+                    Clear All
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      // Navigate to comparison view
+                      onNavigate("compare", { properties: currentCompareList });
+                    }}
+                    disabled={currentCompareList.length < 2}
+                  >
+                    Compare Properties
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {isLoadingResults ? (
+            // Simple loading state - better for accessibility
+            <div className="flex justify-center items-center py-16" role="status" aria-live="polite">
+              <div className="text-center space-y-4">
+                <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary/20 border-t-primary mx-auto"></div>
+                <p className="text-muted-foreground">Searching properties...</p>
+              </div>
+            </div>
+          ) : filteredAndSortedProperties.length === 0 ? (
             <Card>
               <CardContent className="py-16 text-center space-y-4">
                 <div className="w-16 h-16 mx-auto bg-muted rounded-full flex items-center justify-center">
@@ -518,12 +696,22 @@ export function PropertySearchPage({ onNavigate, initialQuery = "" }: PropertySe
                 ? "grid-cols-1 md:grid-cols-2 xl:grid-cols-3"
                 : "grid-cols-1"
             }`}>
-              {filteredAndSortedProperties.map((property) => (
-                <PropertyCard
-                  key={property.id}
-                  property={property}
-                  onViewDetails={(id) => onNavigate("property", { id })}
-                />
+              {filteredAndSortedProperties.map((property, index) => (
+                <div 
+                  key={property.id} 
+                  className="fade-in-stagger"
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
+                  <PropertyCard
+                    property={property}
+                    onViewDetails={(id) => onNavigate("property", { id })}
+                    isFavorite={currentFavorites.includes(property.id)}
+                    onToggleFavorite={() => handleToggleFavorite(property.id)}
+                    isInCompare={currentCompareList.includes(property.id)}
+                    onToggleCompare={() => handleToggleCompare(property.id)}
+                    canAddToCompare={currentCompareList.length < 3 || currentCompareList.includes(property.id)}
+                  />
+                </div>
               ))}
             </div>
           )}

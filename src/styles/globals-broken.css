@@ -1,0 +1,286 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Libre+Baskerville:wght@400;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Custom Color Palette */
+    /* #FCF8EC for white/background */
+    --background: 45 65% 96%;
+    /* #282a28 for black/foreground */
+    --foreground: 75 4% 16%;
+    /* Card backgrounds use white */
+    --card: 45 65% 96%;
+    --card-foreground: 75 4% 16%;
+    --popover: 45 65% 96%;
+    --popover-foreground: 75 4% 16%;
+    /* #375A39 for primary (forest green) */
+    --primary: 125 22% 28%;
+    --primary-foreground: 60 100% 94%;
+    /* #E6C043 for secondary (gold) */
+    --secondary: 50 77% 58%;
+    --secondary-foreground: 75 4% 16%;
+    /* #E4D095 for muted (gray) */
+    --muted: 45 61% 74%;
+    --muted-foreground: 75 4% 16%;
+    /* Use secondary gold for accent */
+    --accent: 50 77% 58%;
+    --accent-foreground: 75 4% 16%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 45 65% 96%;
+    /* Use gray for borders */
+    --border: 45 61% 74%;
+    --input: 45 61% 74%;
+    /* Use primary for ring */
+    --ring: 125 22% 28%;
+    --radius: 0.5rem;
+    
+    /* Accessibility: High contrast focus colors */
+    --focus-ring: 221 83% 53%;
+    --focus-ring-offset: 45 65% 96%;
+  }
+
+  .dark {
+    /* Dark mode: invert background and foreground */
+    --background: 75 4% 16%;
+    --foreground: 45 65% 96%;
+    --card: 75 4% 16%;
+    --card-foreground: 45 65% 96%;
+    --popover: 75 4% 16%;
+    --popover-foreground: 45 65% 96%;
+    /* Keep primary forest green */
+    --primary: 125 22% 28%;
+    --primary-foreground: 45 65% 96%;
+    /* Keep secondary gold */
+    --secondary: 50 77% 58%;
+    --secondary-foreground: 75 4% 16%;
+    /* Darker gray for muted */
+    --muted: 45 30% 35%;
+    --muted-foreground: 45 65% 96%;
+    --accent: 50 77% 58%;
+    --accent-foreground: 75 4% 16%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 45 65% 96%;
+    --border: 45 30% 35%;
+    --input: 210 10% 45%;
+    --ring: 123 37% 29%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Prevent scroll adjustment on input focus */
+  input:focus,
+  textarea:focus,
+  select:focus {
+    scroll-margin: 0;
+  }
+  
+  body {\n    @apply bg-background text-foreground;\n    font-family: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;\n    font-feature-settings: 'ss01', 'ss02';\n    font-variation-settings: normal;\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n    text-rendering: optimizeLegibility;\n  }\n  \n  /* Accessibility: Screen reader only content */\n  .sr-only {\n    position: absolute;\n    width: 1px;\n    height: 1px;\n    padding: 0;\n    margin: -1px;\n    overflow: hidden;\n    clip: rect(0, 0, 0, 0);\n    white-space: nowrap;\n    border: 0;\n  }\n  \n  /* Accessibility: Focus management */\n  .focus\\:not-sr-only:focus {\n    position: static;\n    width: auto;\n    height: auto;\n    padding: inherit;\n    margin: inherit;\n    overflow: visible;\n    clip: auto;\n    white-space: normal;\n  }\n  \n  /* Accessibility: High contrast focus indicators */\n  *:focus-visible {\n    outline: 2px solid hsl(var(--focus-ring));\n    outline-offset: 2px;\n    border-radius: 4px;\n  }\n  \n  /* Accessibility: Remove default focus outline for mouse users */\n  *:focus:not(:focus-visible) {\n    outline: none;\n  }\n  \n  /* Accessibility: Ensure sufficient color contrast for links */\n  a {\n    color: hsl(var(--primary));\n    text-decoration-line: underline;\n    text-decoration-color: hsl(var(--primary) / 0.3);\n    text-underline-offset: 3px;\n    transition: all 0.2s ease;\n  }\n  \n  a:hover {\n    text-decoration-color: hsl(var(--primary));\n  }\n  \n  a:focus-visible {\n    text-decoration-color: hsl(var(--primary));\n  }\n  \n  /* Accessibility: Reduce motion for users who prefer it */\n  @media (prefers-reduced-motion: reduce) {\n    * {\n      animation-duration: 0.01ms !important;\n      animation-iteration-count: 1 !important;\n      transition-duration: 0.01ms !important;\n      scroll-behavior: auto !important;\n    }\n    \n    html {\n      scroll-behavior: auto;\n    }\n  }\n  \n  /* Accessibility: High contrast mode support */\n  @media (prefers-contrast: high) {\n    :root {\n      --border: 0 0% 0%;\n      --input: 0 0% 0%;\n      --ring: 0 0% 0%;\n    }\n    \n    * {\n      border-color: hsl(var(--foreground)) !important;\n    }\n    \n    button, a, [role=\"button\"] {\n      border: 2px solid hsl(var(--foreground)) !important;\n    }\n  }
+  
+  /* Heading Styles with Contemporary Fonts */
+  h1 {
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-tight text-primary;
+    font-family: 'Libre Baskerville', Georgia, serif;
+    font-feature-settings: 'liga', 'dlig';
+  }
+  
+  h2 {
+    @apply text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight leading-tight text-primary;
+    font-family: 'Libre Baskerville', Georgia, serif;
+    font-feature-settings: 'liga', 'dlig';
+  }
+  
+  h3 {
+    @apply text-xl md:text-2xl font-bold tracking-tight leading-snug text-primary;
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-feature-settings: 'ss01', 'ss02';
+  }
+  
+  h4 {
+    @apply text-lg md:text-xl font-semibold tracking-tight leading-snug text-primary;
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-feature-settings: 'ss01', 'ss02';
+  }
+  
+  h5 {
+    @apply text-lg md:text-xl font-semibold tracking-tight leading-normal text-primary;
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-feature-settings: 'ss01', 'ss02';
+  }
+  
+  h6 {
+    @apply text-base md:text-lg font-medium tracking-tight leading-normal text-primary;
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-feature-settings: 'ss01', 'ss02';
+  }
+  
+  /* Homepage specific heading overrides */
+  .homepage-hero h1 {
+    @apply text-primary-foreground;
+  }
+  
+  .homepage-hero h1 span {
+    @apply text-secondary;
+  }
+  
+  /* Special Typography Classes */
+  .font-display {
+    font-family: 'Libre Baskerville', Georgia, serif;
+    font-feature-settings: 'liga', 'dlig';
+  }
+  
+  .font-heading {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-feature-settings: 'ss01', 'ss02';
+  }
+  
+  .font-body {
+    font-family: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-feature-settings: 'ss01', 'ss02';
+  }
+}
+
+@layer components {
+  .container {
+    @apply w-full mx-auto px-4 sm:px-6 lg:px-8;
+    max-width: 1200px;
+  }
+  
+  /* Enhanced Visual Effects */
+  .modern-shadow {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .modern-shadow:hover {
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  }
+  
+  .hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-4px);
+  }
+  
+  .fade-in {
+    animation: fadeInUp 0.8s ease-out;
+  }
+  
+  .glass-effect {
+    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  .float-animation {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  /* Improved spacing utilities */
+  .section-padding {
+    @apply py-16 md:py-24 lg:py-32;
+  }
+  
+  .section-spacing {
+    @apply space-y-8 md:space-y-12 lg:space-y-16;
+  }
+  
+  /* Better text centering and spacing */
+  .text-center-section {
+    @apply text-center max-w-3xl mx-auto space-y-4 md:space-y-6;
+  }
+  
+  /* Card spacing improvements */
+  .card-grid {
+    @apply grid gap-6 md:gap-8 lg:gap-10;
+  }
+  
+  .card-grid-1 {
+    @apply grid-cols-1;
+  }
+  
+  .card-grid-2 {
+    @apply grid-cols-1 md:grid-cols-2;
+  }
+  
+  .card-grid-3 {
+    @apply grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
+  }
+  
+  .card-grid-4 {
+    @apply grid-cols-1 md:grid-cols-2 lg:grid-cols-4;
+  }
+  
+  /* Form spacing */
+  .form-group {
+    @apply space-y-2;
+  }
+  
+  .form-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6;
+  }
+  
+  /* Button spacing */
+  .btn-group {
+    @apply flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center;
+  }
+  
+  /* Content spacing */
+  .content-spacing {
+    @apply space-y-6 md:space-y-8 lg:space-y-12;
+  }
+  
+  .content-spacing-sm {
+    @apply space-y-4 md:space-y-6;
+  }
+  
+  /* Header spacing */
+  .header-spacing {
+    @apply mb-8 md:mb-12 lg:mb-16;
+  }
+  
+  /* Responsive padding for different sections */
+  .hero-padding {
+    @apply py-20 md:py-28 lg:py-36;
+  }
+  
+  .section-padding-sm {
+    @apply py-12 md:py-16 lg:py-20;
+  }
+  
+  .section-padding-lg {
+    @apply py-24 md:py-32 lg:py-40;
+  }
+}

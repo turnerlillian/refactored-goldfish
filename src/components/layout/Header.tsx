@@ -25,11 +25,15 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/90 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70 shadow-lg">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/90 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70 shadow-lg" role="banner">
       <div className="container flex h-16 items-center justify-between">
-        <div className="flex items-center gap-3 cursor-pointer group" onClick={() => onNavigate("home")}>
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary group-hover:scale-105 group-hover:shadow-lg transition-all duration-300 shadow-md">
-            <Home className="h-6 w-6 text-primary-foreground" />
+        <button 
+          className="flex items-center gap-3 cursor-pointer group focus:outline-2 focus:outline-offset-2 focus:outline-secondary rounded-xl p-1 interactive-scale" 
+          onClick={() => onNavigate("home")}
+          aria-label="Rowlly Properties - Go to homepage"
+        >
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary group-hover:scale-105 group-hover:shadow-lg transition-all duration-200 shadow-md">
+            <Home className="h-6 w-6 text-primary-foreground" aria-hidden="true" />
           </div>
           <div className="flex flex-col">
             <span className="text-xl font-bold text-primary font-display">
@@ -39,20 +43,21 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
               LICENSED REAL ESTATE PROFESSIONALS
             </span>
           </div>
-        </div>
+        </button>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-2">
+        <nav className="hidden md:flex items-center gap-2" role="navigation" aria-label="Main navigation">
           {/* Home Button */}
           <button
             onClick={() => onNavigate("home")}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all duration-300 hover:scale-105 ${
+            aria-current={currentPage === "home" ? "page" : undefined}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all duration-200 btn-press focus:outline-2 focus:outline-offset-2 focus:outline-secondary border-2 hover:scale-[1.02] ${
               currentPage === "home" 
-                ? "text-primary bg-primary/10 shadow-md font-semibold border border-primary/20" 
-                : "text-muted-foreground hover:text-primary hover:bg-accent/50 hover:shadow-sm"
+                ? "text-primary bg-primary/15 shadow-md font-semibold border-primary/30 hover:bg-primary/20" 
+                : "text-muted-foreground hover:text-primary hover:bg-accent/70 hover:shadow-md border-transparent hover:border-accent/50"
             }`}
           >
-            <Home className="h-4 w-4" />
+            <Home className="h-4 w-4" aria-hidden="true" />
             <span>Home</span>
           </button>
           
@@ -62,31 +67,50 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
               onClick={() => onNavigate("search")}
               onMouseEnter={() => setIsHouseHuntOpen(true)}
               onMouseLeave={() => setIsHouseHuntOpen(false)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all duration-300 hover:scale-105 ${
-                currentPage === "search" 
-                  ? "text-primary bg-primary/10 shadow-md font-semibold border border-primary/20" 
-                  : "text-muted-foreground hover:text-primary hover:bg-accent/50 hover:shadow-sm"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  setIsHouseHuntOpen(!isHouseHuntOpen);
+                }
+                if (e.key === 'Escape') {
+                  setIsHouseHuntOpen(false);
+                }
+              }}
+              aria-expanded={isHouseHuntOpen}
+              aria-haspopup="menu"
+              aria-current={currentPage === "search" ? "page" : undefined}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all duration-200 btn-press focus:outline-2 focus:outline-offset-2 focus:outline-secondary border-2 hover:scale-[1.02] ${
+                currentPage === "search"
+                  ? "text-primary bg-primary/15 shadow-md font-semibold border-primary/30 hover:bg-primary/20"
+                  : "text-muted-foreground hover:text-primary hover:bg-accent/70 hover:shadow-md border-transparent hover:border-accent/50"
               }`}
             >
-              <Home className="h-4 w-4" />
+              <Home className="h-4 w-4" aria-hidden="true" />
               <span>House Hunt</span>
-              <ChevronDown className="h-3 w-3" />
+              <ChevronDown className="h-3 w-3" aria-hidden="true" />
             </button>
             
             {isHouseHuntOpen && (
               <div 
-                className="absolute top-full left-0 mt-1 w-32 bg-background border rounded-md shadow-lg z-50"
+                className={`absolute top-full left-0 mt-1 w-32 bg-background border rounded-md shadow-lg z-50 dropdown-enter dropdown-enter-active`}
+                role="menu"
+                aria-label="House hunt options"
                 onMouseEnter={() => setIsHouseHuntOpen(true)}
                 onMouseLeave={() => setIsHouseHuntOpen(false)}
               >
-                {houseHuntOptions.map((option) => (
+                {houseHuntOptions.map((option, index) => (
                   <button
                     key={option.name}
+                    role="menuitem"
                     onClick={() => {
                       onNavigate(option.href);
                       setIsHouseHuntOpen(false);
                     }}
-                    className="w-full text-left px-4 py-2 hover:bg-primary/10 focus:bg-primary/10 transition-colors"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Escape') {
+                        setIsHouseHuntOpen(false);
+                      }
+                    }}
+                    className="w-full text-left px-4 py-2 hover:bg-primary/10 focus:bg-primary/10 focus:outline-2 focus:outline-offset-2 focus:outline-secondary transition-all duration-150 btn-press"
                   >
                     {option.name}
                   </button>
@@ -100,13 +124,14 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
             <button
               key={item.href}
               onClick={() => onNavigate(item.href)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all duration-300 hover:scale-105 ${
-                currentPage === item.href 
-                  ? "text-primary bg-primary/10 shadow-md font-semibold border border-primary/20" 
-                  : "text-muted-foreground hover:text-primary hover:bg-accent/50 hover:shadow-sm"
+              aria-current={currentPage === item.href ? "page" : undefined}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all duration-200 btn-press focus:outline-2 focus:outline-offset-2 focus:outline-secondary border-2 hover:scale-[1.02] ${
+                currentPage === item.href
+                  ? "text-primary bg-primary/15 shadow-md font-semibold border-primary/30 hover:bg-primary/20"
+                  : "text-muted-foreground hover:text-primary hover:bg-accent/70 hover:shadow-md border-transparent hover:border-accent/50"
               }`}
             >
-              <item.icon className="h-4 w-4" />
+              <item.icon className="h-4 w-4" aria-hidden="true" />
               <span>{item.name}</span>
             </button>
           ))}
@@ -115,12 +140,15 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
         {/* Mobile Navigation */}
         <Sheet>
           <SheetTrigger className="md:hidden" asChild>
-            <button className="inline-flex items-center justify-center h-10 w-10 rounded-xl hover:bg-accent hover:text-accent-foreground transition-all duration-200 hover:scale-105 shadow-sm">
-              <Menu className="h-5 w-5" />
+            <button 
+              className="inline-flex items-center justify-center h-10 w-10 rounded-xl hover:bg-accent hover:text-accent-foreground transition-all duration-200 shadow-sm focus:outline-2 focus:outline-offset-2 focus:outline-secondary mobile-menu-trigger"
+              aria-label="Open navigation menu"
+            >
+              <Menu className="h-5 w-5" aria-hidden="true" />
             </button>
           </SheetTrigger>
           <SheetContent side="right" className="w-80">
-            <div className="flex items-center gap-3 mb-8">
+            <div className="flex items-center gap-3 mb-8 px-4 pt-6">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary shadow-sm">
                 <Home className="h-5 w-5 text-primary-foreground" />
               </div>
@@ -134,51 +162,56 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
               </div>
             </div>
             
-            <nav className="flex flex-col gap-2">
+            <nav className="flex flex-col gap-2 px-4" role="navigation" aria-label="Mobile navigation">
               {/* Home Button */}
               <button
                 onClick={() => onNavigate("home")}
-                className={`flex items-center gap-3 p-4 rounded-xl transition-all duration-200 text-left ${
+                aria-current={currentPage === "home" ? "page" : undefined}
+                className={`flex items-center gap-3 p-4 rounded-xl transition-all duration-200 text-left focus:outline-2 focus:outline-offset-2 focus:outline-secondary btn-press fade-in-stagger ${
                   currentPage === "home"
-                    ? "bg-primary text-primary-foreground shadow-md scale-[0.98]"
-                    : "hover:bg-accent hover:scale-[0.98] hover:shadow-sm"
+                    ? "bg-primary text-primary-foreground shadow-md"
+                    : "hover:bg-accent hover:shadow-sm"
                 }`}
               >
-                <Home className="h-5 w-5" />
+                <Home className="h-5 w-5" aria-hidden="true" />
                 <span className="font-medium">Home</span>
               </button>
               
               {/* House Hunt Section */}
-              <div className="border-l-2 border-primary/20 pl-4 ml-4">
-                <div className="text-sm font-medium text-muted-foreground mb-2">House Hunt</div>
-                {houseHuntOptions.map((option) => (
+              <div className="border-l-2 border-primary/20 pl-4 ml-4 fade-in-stagger">
+                <h3 className="text-sm font-medium text-muted-foreground mb-2">House Hunt</h3>
+                {houseHuntOptions.map((option, index) => (
                   <button
                     key={option.name}
                     onClick={() => onNavigate(option.href)}
-                    className={`flex items-center gap-3 p-3 rounded-xl transition-all duration-200 text-left w-full mb-1 ${
+                    aria-current={currentPage === option.href ? "page" : undefined}
+                    className={`flex items-center gap-3 p-3 rounded-xl transition-all duration-200 text-left w-full mb-1 focus:outline-2 focus:outline-offset-2 focus:outline-secondary btn-press ${
                       currentPage === option.href
-                        ? "bg-primary text-primary-foreground shadow-md scale-[0.98]"
-                        : "hover:bg-accent hover:scale-[0.98] hover:shadow-sm"
+                        ? "bg-primary text-primary-foreground shadow-md"
+                        : "hover:bg-accent hover:shadow-sm"
                     }`}
+                    style={{ animationDelay: `${(index + 2) * 100}ms` }}
                   >
-                    <Home className="h-4 w-4" />
+                    <Home className="h-4 w-4" aria-hidden="true" />
                     <span className="font-medium">{option.name}</span>
                   </button>
                 ))}
               </div>
               
               {/* Remaining Navigation Items */}
-              {navigation.slice(1).map((item) => (
+              {navigation.slice(1).map((item, index) => (
                 <button
                   key={item.href}
                   onClick={() => onNavigate(item.href)}
-                  className={`flex items-center gap-3 p-4 rounded-xl transition-all duration-200 text-left ${
+                  aria-current={currentPage === item.href ? "page" : undefined}
+                  className={`flex items-center gap-3 p-4 rounded-xl transition-all duration-200 text-left focus:outline-2 focus:outline-offset-2 focus:outline-secondary btn-press fade-in-stagger ${
                     currentPage === item.href
-                      ? "bg-primary text-primary-foreground shadow-md scale-[0.98]"
-                      : "hover:bg-accent hover:scale-[0.98] hover:shadow-sm"
+                      ? "bg-primary text-primary-foreground shadow-md"
+                      : "hover:bg-accent hover:shadow-sm"
                   }`}
+                  style={{ animationDelay: `${(index + 5) * 100}ms` }}
                 >
-                  <item.icon className="h-5 w-5" />
+                  <item.icon className="h-5 w-5" aria-hidden="true" />
                   <span className="font-medium">{item.name}</span>
                 </button>
               ))}

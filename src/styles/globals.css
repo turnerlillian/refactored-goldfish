@@ -36,6 +36,10 @@
     /* Use primary for ring */
     --ring: 125 22% 28%;
     --radius: 0.5rem;
+    
+    /* Accessibility: High contrast focus colors */
+    --focus-ring: 221 83% 53%;
+    --focus-ring-offset: 45 65% 96%;
   }
 
   .dark {
@@ -48,20 +52,27 @@
     --popover-foreground: 45 65% 96%;
     /* Keep primary forest green */
     --primary: 125 22% 28%;
-    --primary-foreground: 45 65% 96%;
+    --primary-foreground: 60 100% 94%;
     /* Keep secondary gold */
     --secondary: 50 77% 58%;
     --secondary-foreground: 75 4% 16%;
-    /* Darker gray for muted */
-    --muted: 45 30% 35%;
+    /* Use darker muted for dark mode */
+    --muted: 75 4% 25%;
     --muted-foreground: 45 65% 96%;
+    /* Use secondary for accent in dark mode */
     --accent: 50 77% 58%;
     --accent-foreground: 75 4% 16%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 45 65% 96%;
-    --border: 45 30% 35%;
-    --input: 210 10% 45%;
-    --ring: 123 37% 29%;
+    /* Darker borders for dark mode */
+    --border: 75 4% 25%;
+    --input: 75 4% 25%;
+    /* Keep primary for ring */
+    --ring: 125 22% 28%;
+    
+    /* Dark mode focus colors */
+    --focus-ring: 213 94% 68%;
+    --focus-ring-offset: 75 4% 16%;
   }
 }
 
@@ -91,6 +102,91 @@
     text-rendering: optimizeLegibility;
   }
   
+  /* Accessibility: Screen reader only content */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  
+  /* Accessibility: Focus management */
+  .focus\:not-sr-only:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: inherit;
+    margin: inherit;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+  
+  /* Accessibility: High contrast focus indicators */
+  *:focus-visible {
+    outline: 2px solid hsl(var(--focus-ring));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  
+  /* Accessibility: Remove default focus outline for mouse users */
+  *:focus:not(:focus-visible) {
+    outline: none;
+  }
+  
+  /* Accessibility: Ensure sufficient color contrast for links */
+  a {
+    color: hsl(var(--primary));
+    text-decoration-line: underline;
+    text-decoration-color: hsl(var(--primary) / 0.3);
+    text-underline-offset: 3px;
+    transition: all 0.2s ease;
+  }
+  
+  a:hover {
+    text-decoration-color: hsl(var(--primary));
+  }
+  
+  a:focus-visible {
+    text-decoration-color: hsl(var(--primary));
+  }
+  
+  /* Accessibility: Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    
+    html {
+      scroll-behavior: auto;
+    }
+  }
+  
+  /* Accessibility: High contrast mode support */
+  @media (prefers-contrast: high) {
+    :root {
+      --border: 0 0% 0%;
+      --input: 0 0% 0%;
+      --ring: 0 0% 0%;
+    }
+    
+    * {
+      border-color: hsl(var(--foreground)) !important;
+    }
+    
+    button, a, [role="button"] {
+      border: 2px solid hsl(var(--foreground)) !important;
+    }
+  }
+  
   /* Heading Styles with Contemporary Fonts */
   h1 {
     @apply text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-tight text-primary;
@@ -106,29 +202,29 @@
   
   h3 {
     @apply text-xl md:text-2xl font-bold tracking-tight leading-snug text-primary;
-    font-family: 'Space Grotesk', 'Inter', sans-serif;
-    font-feature-settings: 'ss01', 'ss02';
+    font-family: 'Libre Baskerville', Georgia, serif;
+    font-feature-settings: 'liga', 'dlig';
   }
   
   h4 {
     @apply text-lg md:text-xl font-semibold tracking-tight leading-snug text-primary;
-    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
     font-feature-settings: 'ss01', 'ss02';
   }
   
   h5 {
     @apply text-lg md:text-xl font-semibold tracking-tight leading-normal text-primary;
-    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
     font-feature-settings: 'ss01', 'ss02';
   }
   
   h6 {
     @apply text-base md:text-lg font-medium tracking-tight leading-normal text-primary;
-    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
     font-feature-settings: 'ss01', 'ss02';
   }
-  
-  /* Homepage specific heading overrides */
+
+  /* Modern text styling for different contexts */
   .homepage-hero h1 {
     @apply text-primary-foreground;
   }
@@ -136,155 +232,255 @@
   .homepage-hero h1 span {
     @apply text-secondary;
   }
-  
-  /* Special Typography Classes */
-  .font-display {
-    font-family: 'Libre Baskerville', Georgia, serif;
-    font-feature-settings: 'liga', 'dlig';
-  }
-  
-  .font-heading {
-    font-family: 'Space Grotesk', 'Inter', sans-serif;
-    font-feature-settings: 'ss01', 'ss02';
-  }
-  
-  .font-body {
-    font-family: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-feature-settings: 'ss01', 'ss02';
-  }
 }
 
 @layer components {
+  /* Button accessibility improvements with subtle animations */
+  .btn {
+    @apply relative inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Subtle button press animation */
+  .btn-press {
+    transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .btn-press:active {
+    transform: scale(0.98);
+  }
+  
+  /* Mobile menu animations */
+  .mobile-menu-trigger {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .mobile-menu-trigger:active {
+    transform: scale(0.95);
+  }
+  
+  /* Subtle scale animation for interactive elements */
+  .interactive-scale {
+    transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .interactive-scale:hover {
+    transform: scale(1.02);
+  }
+  
+  .interactive-scale:active {
+    transform: scale(0.98);
+  }
+  
+  /* Container */
   .container {
     @apply w-full mx-auto px-4 sm:px-6 lg:px-8;
-    max-width: 1200px;
+    /* Keep max-width reasonable for readability */
+    max-width: 1440px;
   }
-  
-  /* Enhanced Visual Effects */
+
+  /* Layout Spacing */
+  .layout-spacing {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  @media (min-width: 768px) {
+    .layout-spacing {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .layout-spacing {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+  }
+
+  /* Header Spacing */
+  .header-spacing {
+    margin-bottom: 3rem;
+  }
+
+  @media (min-width: 768px) {
+    .header-spacing {
+      margin-bottom: 4rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .header-spacing {
+      margin-bottom: 5rem;
+    }
+  }
+
+  /* Modern Cards with Accessibility */
   .modern-shadow {
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    transition: box-shadow 0.3s ease;
+    box-shadow: 
+      0 1px 2px 0 rgba(0, 0, 0, 0.04),
+      0 1px 3px 0 rgba(0, 0, 0, 0.08),
+      0 0 0 1px rgba(0, 0, 0, 0.02);
   }
-  
+
   .modern-shadow:hover {
-    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    box-shadow: 
+      0 4px 6px -1px rgba(0, 0, 0, 0.08),
+      0 2px 4px -1px rgba(0, 0, 0, 0.04),
+      0 0 0 1px rgba(0, 0, 0, 0.02);
   }
-  
+
+  /* Lift Animation with Accessibility and subtle enhancements */
   .hover-lift {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
   .hover-lift:hover {
-    transform: translateY(-4px);
+    transform: translateY(-2px);
   }
   
-  .fade-in {
-    animation: fadeInUp 0.8s ease-out;
+  .hover-lift:active {
+    transform: translateY(0px) scale(0.99);
   }
-  
-  .glass-effect {
-    backdrop-filter: blur(12px);
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-  }
-  
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
+
+  /* Respect reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .hover-lift,
+    .btn-press,
+    .mobile-menu-trigger,
+    .interactive-scale {
+      transition: none;
     }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-10px);
+    
+    .hover-lift:hover,
+    .hover-lift:active,
+    .btn-press:active,
+    .mobile-menu-trigger:active,
+    .interactive-scale:hover,
+    .interactive-scale:active {
+      transform: none;
     }
   }
   
-  .float-animation {
-    animation: float 3s ease-in-out infinite;
+  /* Smooth dropdown menu animations */
+  .dropdown-enter {
+    opacity: 0;
+    transform: scale(0.95) translateY(-5px);
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
-  /* Improved spacing utilities */
+  .dropdown-enter-active {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  
+  .dropdown-exit {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .dropdown-exit-active {
+    opacity: 0;
+    transform: scale(0.95) translateY(-5px);
+  }
+  
+  /* Section Padding */
   .section-padding {
     @apply py-16 md:py-24 lg:py-32;
   }
-  
+
   .section-spacing {
     @apply space-y-8 md:space-y-12 lg:space-y-16;
   }
-  
-  /* Better text centering and spacing */
+
+  /* Text Center Section */
   .text-center-section {
     @apply text-center max-w-3xl mx-auto space-y-4 md:space-y-6;
   }
-  
-  /* Card spacing improvements */
+
+  /* Grid Layouts */
   .card-grid {
     @apply grid gap-6 md:gap-8 lg:gap-10;
   }
-  
+
   .card-grid-1 {
     @apply grid-cols-1;
   }
-  
+
   .card-grid-2 {
     @apply grid-cols-1 md:grid-cols-2;
   }
-  
+
   .card-grid-3 {
     @apply grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
   }
-  
+
   .card-grid-4 {
     @apply grid-cols-1 md:grid-cols-2 lg:grid-cols-4;
   }
-  
-  /* Form spacing */
-  .form-group {
-    @apply space-y-2;
-  }
-  
-  .form-grid {
-    @apply grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6;
-  }
-  
-  /* Button spacing */
+
+  /* Button Groups */
   .btn-group {
-    @apply flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center;
+    @apply flex flex-col sm:flex-row gap-4 justify-center items-center;
+  }
+
+  /* Float Animation */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    33% { transform: translateY(-10px) rotate(1deg); }
+    66% { transform: translateY(5px) rotate(-1deg); }
+  }
+
+  .float-animation {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  /* Fade In Animation with subtle stagger */
+  @keyframes fadeIn {
+    from { 
+      opacity: 0; 
+      transform: translateY(10px);
+    }
+    to { 
+      opacity: 1; 
+      transform: translateY(0);
+    }
+  }
+
+  .fade-in {
+    animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    opacity: 0;
   }
   
-  /* Content spacing */
-  .content-spacing {
-    @apply space-y-6 md:space-y-8 lg:space-y-12;
+  /* Staggered fade-in for lists and grids */
+  .fade-in-stagger {
+    animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    opacity: 0;
   }
   
-  .content-spacing-sm {
-    @apply space-y-4 md:space-y-6;
+  .fade-in-stagger:nth-child(1) { animation-delay: 0ms; }
+  .fade-in-stagger:nth-child(2) { animation-delay: 100ms; }
+  .fade-in-stagger:nth-child(3) { animation-delay: 200ms; }
+  .fade-in-stagger:nth-child(4) { animation-delay: 300ms; }
+  .fade-in-stagger:nth-child(5) { animation-delay: 400ms; }
+  .fade-in-stagger:nth-child(6) { animation-delay: 500ms; }
+
+  /* Responsive text utilities */
+  .text-responsive-sm {
+    @apply text-sm md:text-base;
   }
-  
-  /* Header spacing */
-  .header-spacing {
-    @apply mb-8 md:mb-12 lg:mb-16;
+
+  .text-responsive-base {
+    @apply text-base md:text-lg;
   }
-  
-  /* Responsive padding for different sections */
-  .hero-padding {
-    @apply py-20 md:py-28 lg:py-36;
+
+  .text-responsive-lg {
+    @apply text-lg md:text-xl lg:text-2xl;
   }
-  
-  .section-padding-sm {
-    @apply py-12 md:py-16 lg:py-20;
-  }
-  
-  .section-padding-lg {
-    @apply py-24 md:py-32 lg:py-40;
+
+  .text-responsive-xl {
+    @apply text-xl md:text-2xl lg:text-3xl;
   }
 }
